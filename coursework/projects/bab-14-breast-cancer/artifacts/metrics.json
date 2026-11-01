@@ -1,0 +1,87 @@
+{
+  "cv_comparison": [
+    {
+      "best_params": {
+        "model__C": 1.0,
+        "model__class_weight": "balanced"
+      },
+      "cv_f1_mean": 0.9071359100896942,
+      "cv_f2_mean": 0.9133508712277122,
+      "cv_f2_std": 0.02106677490685909,
+      "cv_pr_auc_mean": 0.9798924514373344,
+      "cv_precision_mean": 0.8973427208721327,
+      "cv_recall_mean": 0.9176470588235295,
+      "cv_roc_auc_mean": 0.9849329205366356,
+      "model": "Logistic Regression"
+    },
+    {
+      "best_params": {
+        "model__estimator__C": 10.0,
+        "model__estimator__class_weight": null,
+        "model__estimator__gamma": "scale"
+      },
+      "cv_f1_mean": 0.924142348836541,
+      "cv_f2_mean": 0.9093589146653229,
+      "cv_f2_std": 0.03237630995280348,
+      "cv_pr_auc_mean": 0.9788703540260066,
+      "cv_precision_mean": 0.9509766443234184,
+      "cv_recall_mean": 0.9,
+      "cv_roc_auc_mean": 0.9846233230134158,
+      "model": "SVM-RBF"
+    },
+    {
+      "best_params": {
+        "model__class_weight": "balanced",
+        "model__max_depth": 5,
+        "model__min_samples_split": 5,
+        "model__n_estimators": 200
+      },
+      "cv_f1_mean": 0.9325261967047636,
+      "cv_f2_mean": 0.9340426045900582,
+      "cv_f2_std": 0.021229394397905856,
+      "cv_pr_auc_mean": 0.9810319281219158,
+      "cv_precision_mean": 0.9309315360050656,
+      "cv_recall_mean": 0.9352941176470588,
+      "cv_roc_auc_mean": 0.9841073271413829,
+      "model": "Random Forest"
+    }
+  ],
+  "cv_splits": 5,
+  "dataset": {
+    "class_counts": {
+      "ganas": 212,
+      "jinak": 357
+    },
+    "selected_features": 10,
+    "source_features": 30,
+    "source_samples": 569,
+    "target_mapping": {
+      "0": "jinak",
+      "1": "ganas"
+    },
+    "test_samples": 114,
+    "train_samples": 455
+  },
+  "random_state": 42,
+  "selected_model": "Random Forest",
+  "selection_metric": "F2",
+  "test_metrics": {
+    "accuracy": 0.9473684210526315,
+    "confusion_matrix": [
+      [
+        69,
+        3
+      ],
+      [
+        3,
+        39
+      ]
+    ],
+    "f1": 0.9285714285714286,
+    "f2": 0.9285714285714286,
+    "pr_auc": 0.9740112540553106,
+    "precision": 0.9285714285714286,
+    "recall": 0.9285714285714286,
+    "roc_auc": 0.9847883597883598
+  }
+}

@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Presentasi Bab 14 — Mini Project Machine Learning</title>
+  <style>
+    :root { --ink: #172033; --line: #dbe4ef; --accent: #0f766e; --accent-dark: #134e4a; --soft: #f0fdfa; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: #111827; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .deck { max-width: 1280px; margin: 28px auto; }
+    .slide {
+      width: 100%; aspect-ratio: 16 / 9; margin: 0 0 28px; padding: 52px 70px;
+      overflow: hidden; background: white; box-shadow: 0 18px 50px rgba(0,0,0,.3);
+      display: flex; flex-direction: column; justify-content: flex-start;
+    }
+    .slide:first-child { color: white; background: radial-gradient(circle at 84% 18%, rgba(45,212,191,.35), transparent 28%), linear-gradient(145deg, #0f172a, #134e4a 60%, #0f766e); justify-content: center; }
+    h1, h2, h3 { margin-top: 0; line-height: 1.16; color: #0f172a; }
+    h1 { margin-bottom: 24px; font-size: 43px; letter-spacing: -.025em; }
+    h2 { margin-bottom: 20px; font-size: 27px; color: var(--accent); }
+    .slide:first-child h1, .slide:first-child h2 { color: white; }
+    p, li { font-size: 19px; line-height: 1.45; }
+    ul, ol { margin-top: 6px; }
+    code { padding: .08em .3em; border-radius: 5px; background: #eef2f7; font-size: .9em; }
+    table { width: 100%; margin: 10px 0 18px; border-collapse: collapse; font-size: 17px; }
+    th { color: white; background: var(--accent-dark); text-align: left; }
+    th, td { padding: 9px 12px; border: 1px solid var(--line); }
+    tr:nth-child(even) td { background: #f8fafc; }
+    img { display: block; width: auto; max-width: 78%; max-height: 330px; margin: 10px auto; object-fit: contain; }
+    .slide p:last-child { margin-top: auto; padding: 13px 17px; border-left: 4px solid var(--accent); background: var(--soft); color: #334155; font-size: 16px; }
+    .slide:first-child p:last-child { margin-top: 22px; border-color: #5eead4; color: #d5f5ef; background: rgba(255,255,255,.08); }
+    .app-shot { width: 30%; aspect-ratio: 760 / 830; margin: 4px auto 10px; overflow: hidden; flex-shrink: 0; border-radius: 10px; background: white; box-shadow: 0 7px 22px rgba(15,23,42,.12); }
+    .app-shot img { width: 189.47%; max-width: none; max-height: none; margin: 0; transform: translate(-23.61%, -6.04%); }
+    @media (max-width: 760px) {
+      .deck { margin: 0; } .slide { height: auto; min-height: 100vh; aspect-ratio: auto; padding: 30px 24px; }
+      h1 { font-size: 34px; } p, li { font-size: 16px; } .app-shot { width: 72%; }
+    }
+    @page { size: 13.333in 7.5in; margin: 0; }
+    @media print {
+      body { background: white; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .deck { max-width: none; margin: 0; }
+      .slide { width: 13.333in; height: 7.5in; margin: 0; padding: .55in .72in; box-shadow: none; break-after: page; page-break-after: always; }
+      .slide:last-child { break-after: auto; page-break-after: auto; }
+      .slide h1 { font-size: 34px; }
+      .slide h2 { font-size: 23px; }
+      .slide p, .slide li { font-size: 15px; line-height: 1.38; }
+      .slide table { font-size: 14px; }
+      .slide img { max-height: 3.1in; }
+      .slide p:last-child { font-size: 13px; padding: 9px 13px; }
+      .slide .app-shot { width: 30%; max-height: none; flex-shrink: 0; }
+      .slide .app-shot img { width: 189.47%; max-width: none; max-height: none; margin: 0; transform: translate(-23.61%, -6.04%); }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck"><section class="slide"><h1>Prediksi Keganasan Massa Payudara</h1>
+<h2>Mini Project Machine Learning End-to-End</h2>
+<p><strong>Durasi total:</strong> ±12 menit<br />
+<strong>Disclaimer:</strong> demonstrasi akademik, bukan diagnosis medis.</p>
+<blockquote>
+<p><strong>Catatan pembicara (30 detik):</strong> Buka dengan tujuan proyek: bukan menggantikan dokter, tetapi mendemonstrasikan workflow ML yang jujur dari data sampai aplikasi.</p>
+</blockquote></section>
+<section class="slide"><h1>1. Masalah dan Tujuan</h1>
+<ul>
+<li>Klasifikasi massa payudara: ganas vs jinak.</li>
+<li>False negative lebih mahal daripada false positive.</li>
+<li>Metrik utama: F2; metrik pendamping: recall, F1, ROC-AUC, PR-AUC.</li>
+<li>Output: model reproducible + aplikasi Streamlit.</li>
+</ul>
+<blockquote>
+<p><strong>Catatan (1 menit):</strong> Jelaskan bahwa recall menjawab “berapa kasus ganas aktual yang berhasil ditemukan.” Prioritas ini selaras dengan contoh skrining pada materi [ML-P07, hlm. 22].</p>
+</blockquote></section>
+<section class="slide"><h1>2. CRISP-DM</h1>
+<ol>
+<li>Business Understanding</li>
+<li>Data Understanding</li>
+<li>Data Preparation</li>
+<li>Modeling</li>
+<li>Evaluation</li>
+<li>Deployment</li>
+</ol>
+<blockquote>
+<p><strong>Catatan (45 detik):</strong> Tekankan bahwa CRISP-DM bersifat iteratif, bukan checklist sekali jalan [ML-P02, hlm. 6].</p>
+</blockquote></section>
+<section class="slide"><h1>3. Dataset</h1>
+<ul>
+<li>Breast Cancer Wisconsin (Diagnostic), UCI.</li>
+<li>569 observasi, 30 fitur asli, dua kelas.</li>
+<li>Proyek memakai 10 fitur <code>mean</code> agar deployment ringkas.</li>
+<li>357 jinak (62,74%) dan 212 ganas (37,26%).</li>
+<li>Tidak ada missing value atau duplikasi.</li>
+</ul>
+<p><img alt="Distribusi kelas" src="class_distribution.png" /></p>
+<blockquote>
+<p><strong>Catatan (1 menit):</strong> Sebutkan bahwa data berasal dari pengukuran inti sel pada citra FNA. Tandai UCI sebagai sumber luar knowledge base.</p>
+</blockquote></section>
+<section class="slide"><h1>4. Data Preparation Anti-Leakage</h1>
+<ul>
+<li>Label dibalik: <code>1 = ganas</code>.</li>
+<li>Split stratified 80:20, seed 42.</li>
+<li>Scaling hanya di dalam pipeline Logistic Regression/SVM.</li>
+<li>Class weight ikut dituning.</li>
+<li>Test set dikunci sampai model dipilih dari CV.</li>
+</ul>
+<blockquote>
+<p><strong>Catatan (1 menit):</strong> Pipeline memastikan scaler di-fit hanya pada fold training, sesuai prinsip evaluasi jujur [ML-P07, hlm. 21]. Outlier tidak dihapus mekanis karena bisa merepresentasikan kasus penting.</p>
+</blockquote></section>
+<section class="slide"><h1>5. Tiga Model dan Tuning</h1>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Fokus grid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Logistic Regression</td>
+<td>C, class weight</td>
+</tr>
+<tr>
+<td>SVM-RBF</td>
+<td>C, gamma, class weight</td>
+</tr>
+<tr>
+<td>Random Forest</td>
+<td>tree, depth, split, class weight</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>GridSearchCV</li>
+<li>Stratified 5-Fold yang sama</li>
+<li>Refit berdasarkan F2</li>
+</ul>
+<blockquote>
+<p><strong>Catatan (1 menit):</strong> Semua model mendapat split, fold, dan metrik yang sama agar perbandingan adil [ML-MODUL-01, hlm. 89–90].</p>
+</blockquote></section>
+<section class="slide"><h1>6. Hasil Cross-Validation</h1>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th style="text-align: right;">F2 CV</th>
+<th style="text-align: right;">Recall CV</th>
+<th style="text-align: right;">PR-AUC CV</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Logistic Regression</td>
+<td style="text-align: right;">0,913 ± 0,021</td>
+<td style="text-align: right;">0,918</td>
+<td style="text-align: right;">0,980</td>
+</tr>
+<tr>
+<td>SVM-RBF</td>
+<td style="text-align: right;">0,909 ± 0,032</td>
+<td style="text-align: right;">0,900</td>
+<td style="text-align: right;">0,979</td>
+</tr>
+<tr>
+<td><strong>Random Forest</strong></td>
+<td style="text-align: right;"><strong>0,934 ± 0,021</strong></td>
+<td style="text-align: right;"><strong>0,935</strong></td>
+<td style="text-align: right;"><strong>0,981</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Perbandingan model" src="model_comparison.png" /></p>
+<blockquote>
+<p><strong>Catatan (1,5 menit):</strong> Random Forest dipilih sebelum melihat test karena F2 dan recall CV tertinggi. Parameter terbaik: 200 tree, depth 5, minimum split 5, balanced class weight.</p>
+</blockquote></section>
+<section class="slide"><h1>7. Hasil Test Set</h1>
+<ul>
+<li>Accuracy: <strong>94,74%</strong></li>
+<li>Precision ganas: <strong>92,86%</strong></li>
+<li>Recall ganas: <strong>92,86%</strong></li>
+<li>F1/F2: <strong>92,86%</strong></li>
+<li>ROC-AUC: <strong>0,9848</strong></li>
+<li>PR-AUC: <strong>0,9740</strong></li>
+</ul>
+<p><img alt="Confusion matrix" src="confusion_matrix.png" /></p>
+<blockquote>
+<p><strong>Catatan (1,5 menit):</strong> Baca confusion matrix: 69 TN, 3 FP, 3 FN, 39 TP. Jangan hanya menonjolkan accuracy—tiga kasus ganas masih terlewat.</p>
+</blockquote></section>
+<section class="slide"><h1>8. Kurva dan Interpretasi</h1>
+<p><img alt="ROC dan PR curve" src="roc_pr_curves.png" /></p>
+<ul>
+<li>Diskriminasi model tinggi.</li>
+<li>PR-AUC relevan untuk menilai kelas positif.</li>
+<li>Threshold 0,5 belum dioptimalkan secara klinis.</li>
+</ul>
+<blockquote>
+<p><strong>Catatan (1 menit):</strong> Jika threshold diturunkan, recall berpotensi naik tetapi false positive juga bertambah [ML-P07, hlm. 22]. Threshold baru tidak boleh dipilih dari test set ini.</p>
+</blockquote></section>
+<section class="slide"><h1>9. Fitur yang Berpengaruh</h1>
+<p><img alt="Feature importance" src="feature_importance.png" /></p>
+<ul>
+<li><code>mean concave points</code></li>
+<li><code>mean concavity</code></li>
+<li><code>mean texture</code></li>
+</ul>
+<blockquote>
+<p><strong>Catatan (45 detik):</strong> Ini permutation importance terhadap F2, bukan bukti kausal atau interpretasi klinis.</p>
+</blockquote></section>
+<section class="slide"><h1>10. Deployment Streamlit</h1>
+<figure class="app-shot"><img alt="Aplikasi Streamlit" src="streamlit_app.png" /></figure>
+<ul>
+<li>Model dan preprocessing dimuat dari satu bundle.</li>
+<li>Sepuluh input dibatasi ke rentang training.</li>
+<li>Output: kelas dan probabilitas ganas.</li>
+<li>Disclaimer medis selalu terlihat.</li>
+</ul>
+<blockquote>
+<p><strong>Catatan (1 menit):</strong> Lakukan demo singkat: ubah satu-dua input, klik Prediksi, dan tunjukkan probabilitas. Deployment harus memakai pipeline yang sama dengan training [ML-MODUL-01, hlm. 90–93].</p>
+</blockquote></section>
+<section class="slide"><h1>11. Keterbatasan</h1>
+<ul>
+<li>Dataset kecil dan satu sumber.</li>
+<li>Belum ada validasi eksternal/klinis.</li>
+<li>Hanya 10 dari 30 fitur yang digunakan.</li>
+<li>Test set hanya 114 observasi.</li>
+<li>Tiga false negative masih terjadi.</li>
+<li>Belum ada monitoring drift atau audit fairness.</li>
+</ul>
+<blockquote>
+<p><strong>Catatan (1 menit):</strong> Jangan menyamakan skor akademik tinggi dengan kesiapan klinis. Pengembangan berikutnya adalah validasi eksternal, threshold validation, calibration audit, dan monitoring.</p>
+</blockquote></section>
+<section class="slide"><h1>12. Kesimpulan</h1>
+<ul>
+<li>Workflow Bab 14 selesai end-to-end.</li>
+<li>Random Forest unggul pada F2 dan recall CV.</li>
+<li>Test recall ganas 92,86%, tetapi bukan 100%.</li>
+<li>Pipeline reproducible dan aplikasi siap didemokan.</li>
+<li><strong>Model bukan diagnosis medis.</strong></li>
+</ul>
+<blockquote>
+<p><strong>Catatan (45 detik):</strong> Tutup dengan satu pesan: proyek yang baik bukan sekadar skor tinggi, tetapi evaluasi jujur, keterbatasan transparan, dan deployment yang konsisten.</p>
+</blockquote></section>
+<section class="slide"><h1>Sumber</h1>
+<ul>
+<li>Materi: [ML-MODUL-01, hlm. 89–94], [ML-P02, hlm. 6–12], [ML-P07, hlm. 19–24].</li>
+<li><strong>Sumber luar:</strong> UCI Breast Cancer Wisconsin (Diagnostic), DOI 10.24432/C5DW2B.</li>
+<li><strong>Sumber luar:</strong> scikit-learn <code>load_breast_cancer</code>.</li>
+</ul></section></main>
+</body>
+</html>

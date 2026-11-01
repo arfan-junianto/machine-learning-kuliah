@@ -1,0 +1,46 @@
+# Python environments and caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# Local secrets and environment overrides
+.env
+.env.*
+!.env.example
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+.~lock.*#
+
+# Local Codex/agent runtime state
+/.agents/
+/.codex/
+/.superpowers/
+
+# Raw imports already normalized into library/sources/pdf/
+/archive/imports/
+/drive-download-*.zip
+/drive-download-*/
+
+# Rebuildable trained-model binaries
+*.joblib
+*.pickle
+*.pkl
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
