@@ -1,0 +1,234 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><title>Jawaban Latihan Kisi-kisi UTS</title>
+<style>
+@page { size:A4; margin:17mm 16mm 18mm; }
+*{box-sizing:border-box} body{font-family:"DejaVu Sans",Arial,sans-serif;color:#173042;line-height:1.52;font-size:10.2pt;margin:0;background:white}
+.cover{height:250mm;display:flex;flex-direction:column;justify-content:center;padding:25mm;background:#0d3b56;color:white;page-break-after:always}
+.eyebrow{letter-spacing:.16em;text-transform:uppercase;font-size:11pt;opacity:.85} h1{font-size:32pt;line-height:1.08;margin:12mm 0 5mm} .subtitle{font-size:15pt;max-width:140mm;opacity:.93} .cover-grid{display:flex;gap:4mm;margin-top:20mm} .cover-card{border:1px solid #9fc3d2;border-radius:4mm;padding:5mm 7mm;background:#174d68}
+.toc{page-break-after:always;padding-top:10mm} .toc h2{border:0} .toc ol{font-size:13pt;line-height:2} .toc a{color:#1f6f8b;text-decoration:none}
+.page-break{page-break-before:always} section{break-before:auto} h2{font-size:20pt;color:#0d3b56;border-bottom:3px solid #59a5a5;padding-bottom:3mm;margin:0 0 7mm} h3{font-size:13.5pt;color:#1f6f8b;margin:8mm 0 3mm;break-after:avoid}
+p{margin:2.5mm 0;text-align:justify} strong{color:#0d3b56} code{font-family:"DejaVu Sans Mono",monospace;background:#edf3f6;padding:1px 4px;border-radius:3px}
+.formula{font-family:"DejaVu Sans Mono",monospace;text-align:center;background:#edf6f7;border-left:4px solid #1f6f8b;border-radius:2mm;padding:4mm;margin:4mm 8mm;color:#0d3b56;break-inside:avoid}
+.table-wrap{margin:4mm 0;break-inside:avoid} .table-wrap strong{white-space:nowrap} table{width:100%;border-collapse:collapse;font-size:9.2pt} th{background:#0d3b56;color:white;text-align:left;padding:2.7mm} td{border:1px solid #cad8df;padding:2.5mm;vertical-align:top} tbody tr:nth-child(even){background:#f3f7f9}
+ul.clean,ol.steps{padding-left:7mm;margin:3mm 0} li{margin:1.5mm 0} .cite{color:#486a7c;font-size:9pt;font-weight:600;white-space:nowrap}
+figure{margin:5mm 0 7mm;break-inside:avoid;border:1px solid #d7e2e8;border-radius:3mm;padding:3mm;background:#fafcfd} figure img{display:block;width:100%;height:auto} figcaption{text-align:center;color:#557084;font-size:8.8pt;margin-top:2mm}
+.note{background:#fff4e9;border-left:5px solid #ef8354;padding:4mm;border-radius:2mm} footer{margin-top:10mm;border-top:1px solid #ccd8df;padding-top:3mm;color:#667d8b;font-size:8.5pt}
+</style></head><body>
+<section class="cover"><div class="eyebrow">Machine Learning • Latihan UTS</div><h1>Jawaban Latihan<br>Kisi-kisi UTS</h1><p class="subtitle">Pembahasan terstruktur, perhitungan tiga desimal, visualisasi, dan sitasi materi kuliah.</p><div class="cover-grid"><div class="cover-card"><strong>5</strong><br>Topik utama</div><div class="cover-card"><strong>18</strong><br>Subbutir</div><div class="cover-card"><strong>4</strong><br>Grafik analisis</div></div></section>
+<section class="toc"><h2>Daftar Isi</h2><ol><li><a href="#1-studi-kasus-prediksi-keterlambatan-kirimcepat">1. Studi Kasus Prediksi Keterlambatan KirimCepat</a></li><li><a href="#2-data-preparation-dan-imbalanced-data">2. Data Preparation dan Imbalanced Data</a></li><li><a href="#3-feature-selection-dan-feature-engineering">3. Feature Selection dan Feature Engineering</a></li><li><a href="#4-decision-tree">4. Decision Tree</a></li><li><a href="#5-k-nearest-neighbors">5. K-Nearest Neighbors</a></li><li><a href="#kesimpulan-singkat">Kesimpulan Singkat</a></li></ol><div class="note">Jawaban disusun berdasarkan knowledge base mata kuliah. Sitasi menggunakan format ID dokumen dan halaman.</div></section>
+<section class="section first"><h2 id="1-studi-kasus-prediksi-keterlambatan-kirimcepat">1. Studi Kasus Prediksi Keterlambatan KirimCepat</h2>
+<h3 id="1-a-kategori-ml-tugas-target-dan-metrik">a. Kategori ML, tugas, target, dan metrik</h3>
+<figure><img src="visuals/class-distribution.svg" alt="Distribusi kelas awal menunjukkan imbalance 88% berbanding 12%."><figcaption>Distribusi kelas awal menunjukkan imbalance 88% berbanding 12%.</figcaption></figure>
+<ul class="clean"><li><strong>Kategori ML:</strong> supervised learning, karena tersedia data berlabel.</li><li><strong>Jenis tugas:</strong> klasifikasi biner.</li><li><strong>Target:</strong> status paket, yaitu <code>terlambat</code> (kelas positif) atau <code>tepat waktu</code> (kelas negatif).</li><li><strong>Metrik utama:</strong> <strong>F1-score kelas terlambat</strong>, karena data tidak seimbang dan F1 menyeimbangkan precision dengan recall. Recall kelas terlambat juga perlu dipantau karena false negative berarti paket terlambat tidak diberi peringatan.</li></ul>
+<p>Model yang selalu menebak <strong>tepat waktu</strong> menghasilkan:</p>
+<div class="formula">Accuracy=(8.800)/(10.000)=0,880</div>
+<p>Walaupun akurasinya <strong>0,880</strong>, model tidak pernah menemukan paket terlambat, sehingga TP = 0, FN = 1.200, dan recall kelas terlambat = 0. Akurasi tidak layak menjadi metrik utama karena kelas mayoritas mendominasi hasil dan menyembunyikan kegagalan total pada kelas yang ingin dideteksi. Materi memberikan pola yang sama: model semua-kelas-mayoritas dapat memiliki akurasi tinggi tetapi recall kelas positif nol. <span class="cite">[ML-P03, hlm. 17–19]</span></p>
+<h3 id="1-b-fase-crisp-dm-yang-dikunjungi-kembali">b. Fase CRISP-DM yang dikunjungi kembali</h3>
+<ol class="steps"><li><strong>Definisi “terlambat” belum disepakati</strong></li></ol>
+<p>Kembali ke fase <strong>Business Understanding</strong>. Tim bisnis dan operasional harus menentukan definisi target yang terukur, misalnya terlambat jika paket diterima lebih dari satu hari setelah estimasi. Setelah definisi disepakati, label target perlu dibentuk ulang secara konsisten. Business Understanding memang bertugas menerjemahkan kebutuhan menjadi target dan metrik yang jelas. <span class="cite">[ML-P02, hlm. 6–7]</span></p>
+<ol class="steps"><li><strong><code>tanggal_diterima</code> dipakai sebagai fitur input</strong></li></ol>
+<p>Kembali ke <strong>Data Understanding</strong> untuk mengidentifikasi bahwa kolom tersebut hanya tersedia setelah paket sampai, kemudian ke <strong>Data Preparation</strong> untuk membuangnya dari fitur, membangun ulang pipeline, dan melatih serta mengevaluasi model kembali. Kolom tersebut merupakan target leakage karena memakai informasi masa depan. <span class="cite">[ML-P02, hlm. 8–9, 18]</span></p>
+<h3 id="1-c-stratified-train-validation-test">c. Stratified train–validation–test</h3>
+<p>Rasio pembagian adalah 70% : 10% : 20%. Stratifikasi menjaga rasio kelas pada setiap subset. <span class="cite">[ML-P02, hlm. 14–17]</span></p>
+<div class="table-wrap"><table><thead><tr>
+<th>Subset</th>
+<th>Tepat waktu</th>
+<th>Terlambat</th>
+<th>Total</th>
+</tr></thead><tbody>
+<tr><td>Train (70%)</td><td>0,70 × 8.800 = <strong>6.160</strong></td><td>0,70 × 1.200 = <strong>840</strong></td><td><strong>7.000</strong></td></tr>
+<tr><td>Validation (10%)</td><td>0,10 × 8.800 = <strong>880</strong></td><td>0,10 × 1.200 = <strong>120</strong></td><td><strong>1.000</strong></td></tr>
+<tr><td>Test (20%)</td><td>0,20 × 8.800 = <strong>1.760</strong></td><td>0,20 × 1.200 = <strong>240</strong></td><td><strong>2.000</strong></td></tr>
+</tbody></table></div>
+<p>Fungsi setiap subset:</p>
+<ul class="clean"><li><strong>Train:</strong> mempelajari parameter model dan melakukan fit preprocessing.</li><li><strong>Validation:</strong> memilih model, hyperparameter, threshold, dan tindakan penanganan imbalance.</li><li><strong>Test:</strong> mengukur performa akhir satu kali setelah seluruh pilihan selesai.</li></ul>
+<h3 id="1-d-diagnosis-tiga-model">d. Diagnosis tiga model</h3>
+<figure><img src="visuals/f1-models.svg" alt="Model Q memiliki F1 validation tertinggi dengan gap yang tetap kecil."><figcaption>Model Q memiliki F1 validation tertinggi dengan gap yang tetap kecil.</figcaption></figure>
+<p>Gap dihitung dengan <code>F1_train − F1_validation</code>.</p>
+<div class="table-wrap"><table><thead><tr>
+<th>Model</th>
+<th>F1 train</th>
+<th>F1 validation</th>
+<th>Gap</th>
+<th>Diagnosis</th>
+</tr></thead><tbody>
+<tr><td>P</td><td>0,520</td><td>0,510</td><td><strong>0,010</strong></td><td>Keduanya rendah dan berdekatan: <strong>underfitting/high bias</strong></td></tr>
+<tr><td>Q</td><td>0,800</td><td>0,770</td><td><strong>0,030</strong></td><td>Skor relatif tinggi dengan gap kecil: generalisasi terbaik</td></tr>
+<tr><td>R</td><td>0,970</td><td>0,650</td><td><strong>0,320</strong></td><td>Train sangat tinggi, validation jauh lebih rendah: <strong>overfitting/high variance</strong></td></tr>
+</tbody></table></div>
+<p>Tindakan untuk <strong>P</strong>: tambah kapasitas model atau perbaiki fitur agar pola yang relevan dapat dipelajari. Tindakan untuk <strong>R</strong>: kurangi kompleksitas/beri regularisasi; alternatifnya tambah data train. Model yang dilanjutkan adalah <strong>Q</strong>, karena F1 validation tertinggi dengan gap kecil. Diagnosis ini mengikuti ciri high bias dan high variance pada learning curve. <span class="cite">[ML-P02, hlm. 19–21]</span></p>
+</section><section class="section page-break"><h2 id="2-data-preparation-dan-imbalanced-data">2. Data Preparation dan Imbalanced Data</h2>
+<h3 id="2-a-iqr-berat-paket">a. IQR berat paket</h3>
+<p>Data terurut: 1, 2, 2, 3, 3, 4, 5, 18.</p>
+<p>Dengan metode median dari masing-masing separuh data:</p>
+<div class="formula">Q_1=(2+2)/(2)=2,000</div>
+<div class="formula">Q_3=(4+5)/(2)=4,500</div>
+<div class="formula">IQR=Q_3-Q_1=4,500-2,000=2,500</div>
+<div class="formula">Batas bawah=Q_1-1,5(IQR)=2-3,75=-1,750</div>
+<div class="formula">Batas atas=Q_3+1,5(IQR)=4,5+3,75=8,250</div>
+<p>Nilai <strong>18 kg</strong> adalah kandidat outlier karena 18 &gt; 8,250. Nilai tersebut tidak boleh langsung dihapus. Periksa dulu apakah terjadi salah input/salah satuan. Jika paket 18 kg valid dan memang mungkin terjadi dalam operasi, nilainya sebaiknya dipertahankan atau ditangani dengan transformasi/metode robust karena menghapusnya dapat membuang fenomena penting. <span class="cite">[ML-P03, hlm. 11–15]</span></p>
+<h3 id="2-b-imputasi-dan-z-score">b. Imputasi dan Z-score</h3>
+<p>Nilai jarak yang tersedia: 5, 8, 10, 12, 65.</p>
+<div class="formula">Mean=(5+8+10+12+65)/(5)=(100)/(5)=20,000 km</div>
+<p>Median dari data terurut 5, 8, 10, 12, 65 adalah <strong>10,000 km</strong>.</p>
+<p>Imputasi yang lebih tepat adalah <strong>median</strong>, karena distribusi miring akibat nilai 65 dan median lebih tahan terhadap nilai ekstrem. <span class="cite">[ML-P03, hlm. 9]</span></p>
+<p>Untuk paket 55 km:</p>
+<div class="formula">z=(x-μ)/(σ)=(55-15)/(12)=(40)/(12)=3,333</div>
+<p>Karena |3,333|&gt;3, jarak 55 km merupakan <strong>kandidat outlier</strong>. Status kandidat tidak otomatis berarti nilai harus dihapus. <span class="cite">[ML-P03, hlm. 14–15]</span></p>
+<h3 id="2-c-class-weight">c. Class weight</h3>
+<p>Pada data train: N = 7.000, K = 2, <code>n_tepat_waktu</code> = 6.160, dan <code>n_terlambat</code> = 840.</p>
+<div class="formula">w_tepat=(7.000)/(2×6.160)=0,568</div>
+<div class="formula">w_terlambat=(7.000)/(2×840)=4,167</div>
+<p>Perbandingannya:</p>
+<div class="formula">frac{w_terlambat}{w_tepat}=frac{4,167}{0,568}=7,333</div>
+<p>Artinya, kesalahan pada satu paket terlambat diberi penalti sekitar <strong>7,333 kali</strong> kesalahan pada satu paket tepat waktu. Dengan demikian model lebih memperhatikan kelas minoritas tanpa menggandakan atau menghapus data. <span class="cite">[ML-P03, hlm. 22–23]</span></p>
+<h3 id="2-d-smote">d. SMOTE</h3>
+<p>Diketahui:</p>
+<div class="formula">x_i=(2,7),    x_j=(8,4),    λ=(1)/(3)</div>
+<div class="formula">x_j-x_i=(8-2,4-7)=(6,-3)</div>
+<div class="formula">x_baru=(2,7)+(1)/(3)(6,-3)=(2,7)+(2,-1)=(4,6)</div>
+<p>SMOTE hanya diterapkan pada data train agar informasi sintetis dari kelas minoritas tidak masuk ke validation/test. Jika dilakukan sebelum split, sampel yang saling berkaitan dapat tersebar ke subset evaluasi dan menghasilkan data leakage serta skor yang terlalu optimistis. <span class="cite">[ML-P03, hlm. 20–21, 24–25]</span></p>
+</section><section class="section page-break"><h2 id="3-feature-selection-dan-feature-engineering">3. Feature Selection dan Feature Engineering</h2>
+<h3 id="3-a-uji-chi-square">a. Uji chi-square</h3>
+<p>Total baris = 200, total terlambat = 50, dan total tepat waktu = 150. Karena setiap baris tabel memiliki total 100, frekuensi harapan untuk masing-masing baris adalah:</p>
+<div class="formula">E_terlambat=(100×50)/(200)=25</div>
+<div class="formula">E_tepat=(100×150)/(200)=75</div>
+<div class="table-wrap"><table><thead><tr>
+<th>Sel</th>
+<th>O</th>
+<th>E</th>
+<th>(O−E)²/E</th>
+</tr></thead><tbody>
+<tr><td>Ekonomi=Ya, Terlambat</td><td>36</td><td>25</td><td>4,840</td></tr>
+<tr><td>Ekonomi=Ya, Tepat</td><td>64</td><td>75</td><td>1,613</td></tr>
+<tr><td>Ekonomi=Tidak, Terlambat</td><td>14</td><td>25</td><td>4,840</td></tr>
+<tr><td>Ekonomi=Tidak, Tepat</td><td>86</td><td>75</td><td>1,613</td></tr>
+</tbody></table></div>
+<div class="formula">χ^2=4,840+1,613+4,840+1,613=12,907</div>
+<p>Karena <strong>12,907 &gt; 3,840</strong>, H0 independensi ditolak pada α = 0,05. Ada hubungan signifikan antara layanan ekonomi dan keterlambatan, sehingga fitur <strong>layanan ekonomi layak dipertahankan</strong>. Chi-square membandingkan frekuensi observasi dengan frekuensi harapan; selisih yang makin besar mengindikasikan hubungan yang lebih kuat. <span class="cite">[ML-P04, hlm. 14]</span></p>
+<h3 id="3-b-rancangan-columntransformer">b. Rancangan ColumnTransformer</h3>
+<p>Rancangan preprocessing:</p>
+<div class="table-wrap"><table><thead><tr>
+<th>Kelompok</th>
+<th>Kolom</th>
+<th>Perlakuan</th>
+</tr></thead><tbody>
+<tr><td>Numerik biasa</td><td><code>berat_kg</code></td><td><code>SimpleImputer(strategy="median")</code>, kemudian <code>StandardScaler()</code></td></tr>
+<tr><td>Numerik miring</td><td><code>jarak_km</code></td><td>imputasi median, transformasi <code>log1p</code> bila seluruh nilai nonnegatif, lalu <code>RobustScaler()</code> atau <code>StandardScaler()</code></td></tr>
+<tr><td>Nominal</td><td><code>kota_tujuan</code>, <code>jenis_layanan</code></td><td>imputasi modus, lalu <code>OneHotEncoder(handle_unknown="ignore")</code></td></tr>
+<tr><td>Ordinal</td><td><code>tingkat_prioritas</code></td><td>imputasi modus, lalu <code>OrdinalEncoder</code> dengan urutan <code>rendah &lt; sedang &lt; tinggi</code></td></tr>
+<tr><td>Timestamp</td><td><code>waktu_pemesanan</code></td><td>ekstrak fitur waktu, lalu buang timestamp mentah</td></tr>
+</tbody></table></div>
+<p>Dua fitur baru yang diusulkan:</p>
+<ol class="steps"><li><strong><code>jam_pemesanan</code></strong>, untuk menangkap pola keterlambatan berdasarkan jam sibuk atau jam operasional.</li><li><strong><code>is_akhir_pekan</code></strong>, bernilai 1 untuk Sabtu/Minggu dan 0 selainnya, untuk menangkap perbedaan kapasitas operasional akhir pekan.</li></ol>
+<p>Kolom <strong><code>tanggal_diterima</code> wajib dibuang</strong>, karena baru tersedia setelah paket sampai. Memakainya saat memprediksi keterlambatan berarti menggunakan informasi masa depan dan menimbulkan leakage. Timestamp memang sebaiknya diubah menjadi pola waktu, ColumnTransformer memberi jalur berbeda untuk numerik, nominal, dan ordinal, sedangkan fitur masa depan harus dibuang. <span class="cite">[ML-P04, hlm. 8–9, 20, 23]</span></p>
+</section><section class="section page-break"><h2 id="4-decision-tree">4. Decision Tree</h2>
+<h3 id="4-a-gini-impurity">a. Gini impurity</h3>
+<p>Node induk mempunyai 6 terlambat dan 14 tepat waktu:</p>
+<div class="formula">Gini(parent)=1-((6)/(20))^2-((14)/(20))^2=0,420</div>
+<p><strong>Kandidat X — cuaca buruk di rute</strong></p>
+<p>Cabang Ya (4 terlambat, 1 tepat):</p>
+<div class="formula">Gini(X_Ya)=1-(4/5)^2-(1/5)^2=0,320</div>
+<p>Cabang Tidak (2 terlambat, 13 tepat):</p>
+<div class="formula">Gini(X_Tidak)=1-(2/15)^2-(13/15)^2=0,231</div>
+<div class="formula">Gini_tertimbang(X)=(5)/(20)(0,320)+(15)/(20)(0,231)=0,253</div>
+<p><strong>Kandidat Y — layanan ekonomi</strong></p>
+<p>Cabang Ya (4 terlambat, 6 tepat):</p>
+<div class="formula">Gini(Y_Ya)=1-(4/10)^2-(6/10)^2=0,480</div>
+<p>Cabang Tidak (2 terlambat, 8 tepat):</p>
+<div class="formula">Gini(Y_Tidak)=1-(2/10)^2-(8/10)^2=0,320</div>
+<div class="formula">Gini_tertimbang(Y)=(10)/(20)(0,480)+(10)/(20)(0,320)=0,400</div>
+<p>CART memilih <strong>X (cuaca buruk di rute)</strong> karena Gini tertimbangnya paling kecil, yaitu 0,253. Semakin kecil Gini, semakin homogen node hasil split. <span class="cite">[ML-P05, hlm. 7–8]</span></p>
+<h3 id="4-b-entropy-dan-information-gain">b. Entropy dan Information Gain</h3>
+<p>Entropy induk:</p>
+<div class="formula">H(parent)=-0,3log_2(0,3)-0,7log_2(0,7)=0,881</div>
+<p><strong>Kandidat X</strong></p>
+<div class="formula">H(X_Ya)=H(4/5,1/5)=0,722</div>
+<div class="formula">H(X_Tidak)=H(2/15,13/15)=0,567</div>
+<div class="formula">H_tertimbang(X)=(5)/(20)(0,722)+(15)/(20)(0,567)=0,605</div>
+<div class="formula">IG(X)=0,881-0,605=0,276</div>
+<p><strong>Kandidat Y</strong></p>
+<div class="formula">H(Y_Ya)=H(4/10,6/10)=0,971</div>
+<div class="formula">H(Y_Tidak)=H(2/10,8/10)=0,722</div>
+<div class="formula">H_tertimbang(Y)=(10)/(20)(0,971)+(10)/(20)(0,722)=0,846</div>
+<div class="formula">IG(Y)=0,881-0,846=0,035</div>
+<p>ID3 juga memilih <strong>X</strong>, karena Information Gain X = 0,276 lebih besar daripada Y = 0,035. Information Gain memilih split dengan penurunan entropy terbesar. <span class="cite">[ML-P05, hlm. 9–12]</span></p>
+<h3 id="4-c-cost-complexity-pruning">c. Cost-complexity pruning</h3>
+<p>Untuk α = 0,004:</p>
+<div class="table-wrap"><table><colgroup><col style="width:18%"><col style="width:62%"><col style="width:20%"></colgroup><thead><tr>
+<th>Pohon</th>
+<th>Perhitungan Cα(T)</th>
+<th>Nilai</th>
+</tr></thead><tbody>
+<tr><td>T1</td><td>0,11 + 0,004(22)</td><td>0,198</td></tr>
+<tr><td>T2</td><td>0,15 + 0,004(8)</td><td><strong>0,182</strong></td></tr>
+<tr><td>T3</td><td>0,23 + 0,004(3)</td><td>0,242</td></tr>
+</tbody></table></div>
+<p>Pohon terpilih adalah <strong>T2 dengan Cα = 0,182</strong>.</p>
+<p>Untuk α = 0,025:</p>
+<div class="table-wrap"><table><colgroup><col style="width:18%"><col style="width:62%"><col style="width:20%"></colgroup><thead><tr>
+<th>Pohon</th>
+<th>Perhitungan Cα(T)</th>
+<th>Nilai</th>
+</tr></thead><tbody>
+<tr><td>T1</td><td>0,11 + 0,025(22)</td><td>0,660</td></tr>
+<tr><td>T2</td><td>0,15 + 0,025(8)</td><td>0,350</td></tr>
+<tr><td>T3</td><td>0,23 + 0,025(3)</td><td><strong>0,305</strong></td></tr>
+</tbody></table></div>
+<p>Pohon terpilih adalah <strong>T3 dengan Cα = 0,305</strong>. Ketika α meningkat, penalti untuk banyak leaf makin besar sehingga pohon yang lebih sederhana lebih disukai. Dampaknya adalah <strong>bias cenderung naik</strong> dan <strong>variance cenderung turun</strong>. <span class="cite">[ML-P05, hlm. 18–19]</span></p>
+<h3 id="4-d-validation-curve-max-depth">d. Validation curve max_depth</h3>
+<figure><img src="visuals/depth-validation.svg" alt="Validation mencapai puncak pada max_depth = 3 lalu menurun."><figcaption>Validation mencapai puncak pada max_depth = 3 lalu menurun.</figcaption></figure>
+<p>Nilai validation tertinggi adalah <strong>0,810 pada <code>max_depth = 3</code></strong>, sehingga depth terbaik adalah 3.</p>
+<ul class="clean"><li><strong>Depth 1:</strong> train = 0,690 dan validation = 0,680. Keduanya rendah dengan gap 0,010, sehingga model underfitting/high bias.</li><li><strong>Depth 10:</strong> train = 0,990 dan validation = 0,700. Gap 0,290 sangat besar, sehingga model overfitting/high variance.</li></ul>
+<p>Depth dipilih dari puncak performa validation sebelum gap melebar, bukan dari akurasi train tertinggi. <span class="cite">[ML-P05, hlm. 20]</span></p>
+</section><section class="section page-break"><h2 id="5-k-nearest-neighbors">5. K-Nearest Neighbors</h2>
+<p>Data baru adalah q = (3, 5). Label data latih: D1 terlambat; D2 tepat waktu; D3 tepat waktu; D4 terlambat; D5 tepat waktu.</p>
+<h3 id="5-a-euclidean-dan-weighted-knn">a. Euclidean dan weighted KNN</h3>
+<p>Rumus Euclidean:</p>
+<div class="formula">d(q,D_i)=√((x_q-x_i)^2+(y_q-y_i)^2)</div>
+<div class="table-wrap"><table><thead><tr>
+<th>Data</th>
+<th>Perhitungan</th>
+<th>Jarak</th>
+<th>Kelas</th>
+<th>Bobot 1/d</th>
+</tr></thead><tbody>
+<tr><td>D1 (4,6)</td><td>√[(3−4)²+(5−6)²]</td><td><strong>1,414</strong></td><td>Terlambat</td><td>0,707</td></tr>
+<tr><td>D2 (6,9)</td><td>√[(3−6)²+(5−9)²]</td><td><strong>5,000</strong></td><td>Tepat waktu</td><td>0,200</td></tr>
+<tr><td>D3 (0,1)</td><td>√[(3−0)²+(5−1)²]</td><td><strong>5,000</strong></td><td>Tepat waktu</td><td>0,200</td></tr>
+<tr><td>D4 (9,13)</td><td>√[(3−9)²+(5−13)²]</td><td><strong>10,000</strong></td><td>Terlambat</td><td>0,100</td></tr>
+<tr><td>D5 (3,17)</td><td>√[(3−3)²+(5−17)²]</td><td><strong>12,000</strong></td><td>Tepat waktu</td><td>0,083</td></tr>
+</tbody></table></div>
+<p>Tiga tetangga terdekat adalah D1, D2, dan D3.</p>
+<ul class="clean"><li><strong>Voting mayoritas:</strong> tepat waktu mendapat 2 suara dan terlambat 1 suara, sehingga prediksi = <strong>tepat waktu</strong>.</li><li><strong>Weighted voting:</strong> skor terlambat = 0,707; skor tepat waktu = 0,200 + 0,200 = 0,400. Prediksi = <strong>terlambat</strong>.</li></ul>
+<p>Keputusan <strong>berubah</strong>, karena D1 yang terlambat jauh lebih dekat daripada D2 dan D3. Weighted KNN memang memberi pengaruh lebih besar pada tetangga yang dekat. <span class="cite">[ML-P06, hlm. 4–7, 12]</span></p>
+<h3 id="5-b-manhattan">b. Manhattan</h3>
+<p>Rumus Manhattan:</p>
+<div class="formula">d(q,D_i)=|x_q-x_i|+|y_q-y_i|</div>
+<div class="table-wrap"><table><thead><tr>
+<th>Data</th>
+<th>Jarak Manhattan</th>
+<th>Kelas</th>
+<th>Bobot 1/d</th>
+</tr></thead><tbody>
+<tr><td>D1</td><td><strong>2,000</strong></td><td>Terlambat</td><td>0,500</td></tr>
+<tr><td>D2</td><td><strong>7,000</strong></td><td>Tepat waktu</td><td>0,143</td></tr>
+<tr><td>D3</td><td><strong>7,000</strong></td><td>Tepat waktu</td><td>0,143</td></tr>
+<tr><td>D5</td><td><strong>12,000</strong></td><td>Tepat waktu</td><td>0,083</td></tr>
+<tr><td>D4</td><td><strong>14,000</strong></td><td>Terlambat</td><td>0,071</td></tr>
+</tbody></table></div>
+<p>Tiga tetangga terdekat tetap D1, D2, dan D3.</p>
+<ul class="clean"><li>Voting mayoritas tetap menghasilkan <strong>tepat waktu</strong>.</li><li>Weighted voting: terlambat = 0,500 dan tepat waktu = 0,143 + 0,143 = 0,286, sehingga tetap menghasilkan <strong>terlambat</strong>.</li></ul>
+<p>Jadi, urutan tiga tetangga dan kedua prediksi <strong>tidak berubah</strong> dari hasil Euclidean. Metrik Euclidean dan Manhattan memiliki rumus berbeda dan pada dataset lain dapat menghasilkan tetangga berbeda. <span class="cite">[ML-P06, hlm. 6–8]</span></p>
+<h3 id="5-c-memilih-k">c. Memilih k</h3>
+<figure><img src="visuals/knn-cv.svg" alt="Rata-rata akurasi CV tertinggi terjadi pada k = 7."><figcaption>Rata-rata akurasi CV tertinggi terjadi pada k = 7.</figcaption></figure>
+<p>Rata-rata akurasi cross-validation tertinggi adalah <strong>0,860 pada k = 7</strong>, sehingga k terbaik adalah <strong>7</strong>.</p>
+<ul class="clean"><li><strong>k = 1:</strong> akurasi train = 1,000 tetapi CV = 0,770. Model sangat sensitif terhadap data lokal/noise, sehingga mengalami overfitting dan high variance.</li><li><strong>k = 21:</strong> train = 0,800 dan CV = 0,780. Nilai k yang besar membuat batas keputusan terlalu halus dan pola lokal hilang, sehingga mengarah ke underfitting/high bias.</li></ul>
+<p>k tidak dipilih dari akurasi train karena k = 1 dapat menghafal data train dan menghasilkan akurasi 1,000 tanpa menjamin generalisasi. Hyperparameter k harus dipilih menggunakan cross-validation pada data train. <span class="cite">[ML-P06, hlm. 11]</span></p>
+<h3 id="5-d-alasan-scaling">d. Alasan scaling</h3>
+<p>KNN menghitung kedekatan langsung dari selisih nilai fitur. Jika skala fitur berbeda, fitur dengan rentang angka besar akan mendominasi jarak walaupun belum tentu paling penting. Misalnya, <code>jarak_km</code> dapat bernilai puluhan atau ratusan, sedangkan skor beban gudang mungkin hanya berada pada skala kecil; tanpa scaling, perubahan jarak akan mengalahkan kontribusi beban gudang.</p>
+<p>Karena itu fitur perlu distandardisasi agar keduanya dibandingkan dalam satuan yang sebanding. Scaler harus di-fit hanya pada data train untuk menghindari leakage. <span class="cite">[ML-P06, hlm. 9–10]</span></p>
+</section><section class="section page-break"><h2 id="kesimpulan-singkat">Kesimpulan Singkat</h2>
+<p>Kasus KirimCepat membutuhkan evaluasi yang berfokus pada kelas terlambat, preprocessing bebas leakage, serta validasi model yang mempertimbangkan imbalance dan generalisasi. Dari perhitungan yang diberikan, model Q paling layak diteruskan, cuaca buruk menjadi split Decision Tree terbaik, <code>max_depth = 3</code> dan <code>k = 7</code> menjadi pilihan berdasarkan validation/CV, sedangkan weighted KNN mengubah prediksi paket baru menjadi terlambat karena tetangga terdekat memiliki bobot dominan.</p>
+</section>
+<footer>Sumber utama: ML-P02, ML-P03, ML-P04, ML-P05, dan ML-P06. Angka dihitung ulang dan dibulatkan hingga tiga desimal.</footer>
+</body></html>

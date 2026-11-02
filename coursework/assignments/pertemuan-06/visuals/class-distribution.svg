@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480">
+<rect width="960" height="480" rx="24" fill="#f7fafc"/>
+<text x="56" y="56" font-family="DejaVu Sans" font-size="26" font-weight="700" fill="#12304a">Distribusi Kelas Paket</text>
+<text x="56" y="86" font-family="DejaVu Sans" font-size="15" fill="#557084">10.000 pengiriman: kelas positif adalah terlambat</text>
+
+<line x1="100" y1="390" x2="890" y2="390" stroke="#b9c8d4" stroke-width="2"/>
+<rect x="190" y="126" width="210" height="264" rx="10" fill="#1f6f8b"/>
+<rect x="560" y="354" width="210" height="36" rx="10" fill="#ef8354"/>
+<text x="295" y="112" text-anchor="middle" font-family="DejaVu Sans" font-size="24" font-weight="700" fill="#1f6f8b">8.800 (88%)</text>
+<text x="665" y="340" text-anchor="middle" font-family="DejaVu Sans" font-size="24" font-weight="700" fill="#c95c32">1.200 (12%)</text>
+<text x="295" y="430" text-anchor="middle" font-family="DejaVu Sans" font-size="19" fill="#12304a">Tepat waktu</text>
+<text x="665" y="430" text-anchor="middle" font-family="DejaVu Sans" font-size="19" fill="#12304a">Terlambat</text>
+</svg>

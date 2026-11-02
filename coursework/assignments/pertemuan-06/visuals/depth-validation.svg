@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480">
+<rect width="960" height="480" rx="24" fill="#f7fafc"/>
+<text x="56" y="56" font-family="DejaVu Sans" font-size="26" font-weight="700" fill="#12304a">Validation Curve Decision Tree</text>
+<text x="56" y="86" font-family="DejaVu Sans" font-size="15" fill="#557084">Sweet spot berada pada max_depth = 3</text>
+
+<line x1="100" y1="390" x2="900" y2="390" stroke="#b9c8d4" stroke-width="2"/><line x1="100" y1="115" x2="100" y2="390" stroke="#b9c8d4" stroke-width="2"/>
+<polyline points="130,272 260,228 390,190 520,157 650,124 820,113" fill="none" stroke="#1f6f8b" stroke-width="5"/>
+<polyline points="130,277 260,234 390,198 520,204 650,212 820,228" fill="none" stroke="#ef8354" stroke-width="5"/>
+<g fill="#1f6f8b"><circle cx="130" cy="272" r="7"/><circle cx="260" cy="228" r="7"/><circle cx="390" cy="190" r="7"/><circle cx="520" cy="157" r="7"/><circle cx="650" cy="124" r="7"/><circle cx="820" cy="113" r="7"/></g>
+<g fill="#ef8354"><circle cx="130" cy="277" r="7"/><circle cx="260" cy="234" r="7"/><circle cx="390" cy="198" r="7"/><circle cx="520" cy="204" r="7"/><circle cx="650" cy="212" r="7"/><circle cx="820" cy="228" r="7"/></g>
+<g font-family="DejaVu Sans" font-size="16" fill="#12304a"><text x="130" y="425" text-anchor="middle">1</text><text x="260" y="425" text-anchor="middle">2</text><text x="390" y="425" text-anchor="middle">3</text><text x="520" y="425" text-anchor="middle">5</text><text x="650" y="425" text-anchor="middle">7</text><text x="820" y="425" text-anchor="middle">10</text></g>
+<text x="390" y="174" text-anchor="middle" font-family="DejaVu Sans" font-size="16" font-weight="700" fill="#c95c32">Validation maksimum 0,81</text>
+<rect x="650" y="36" width="20" height="12" fill="#1f6f8b"/><text x="678" y="47" font-family="DejaVu Sans" font-size="14" fill="#12304a">Train</text><rect x="750" y="36" width="20" height="12" fill="#ef8354"/><text x="778" y="47" font-family="DejaVu Sans" font-size="14" fill="#12304a">Validation</text>
+</svg>
