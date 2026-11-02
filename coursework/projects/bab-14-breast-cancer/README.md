@@ -4,6 +4,47 @@ Proyek ini menyelesaikan alur machine learning end-to-end: memahami masalah, men
 
 > **Peringatan:** aplikasi dan model ini hanya demonstrasi akademik, bukan diagnosis medis dan bukan pengganti tenaga kesehatan.
 
+## Live Demo
+
+[![Buka aplikasi Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://machine-learning-kuliah-edg2ydcbvp2yjsu7weh5dx.streamlit.app/)
+
+Demo online dapat dibuka melalui:
+
+**https://machine-learning-kuliah-edg2ydcbvp2yjsu7weh5dx.streamlit.app/**
+
+### Cara mencoba aplikasi
+
+1. Buka tautan **Live Demo** di atas.
+2. Tunggu sampai formulir **Skrining Risiko Kanker Payudara** tampil.
+3. Gunakan nilai bawaan untuk percobaan pertama, atau ubah sepuluh karakteristik inti sel sesuai data yang ingin diuji.
+4. Klik tombol **Prediksi**.
+5. Aplikasi menampilkan kelas prediksi **JINAK** atau **GANAS** beserta probabilitas ganas.
+
+Nilai input dibatasi pada rentang data training. Hasil aplikasi tetap merupakan demonstrasi model dan tidak boleh digunakan sebagai diagnosis medis.
+
+### Jika aplikasi meminta login
+
+Pemilik deployment perlu menjadikannya publik melalui aplikasi Streamlit:
+
+1. Klik **Share** di kanan atas aplikasi.
+2. Pilih **Make this app public**; atau buka **Manage app → Settings → Sharing**.
+3. Pada **Who can view this app**, pilih **This app is public and searchable**, lalu simpan.
+4. Uji tautan kembali melalui jendela incognito tanpa login.
+
+## Deploy dari GitHub ke Streamlit Community Cloud
+
+1. Login ke [Streamlit Community Cloud](https://share.streamlit.io/) menggunakan akun GitHub.
+2. Klik **Create app**, lalu pilih repository `arfan-junianto/machine-learning-kuliah`.
+3. Gunakan branch `main`.
+4. Isi **Main file path** dengan:
+
+   ```text
+   coursework/projects/bab-14-breast-cancer/app.py
+   ```
+
+5. Klik **Deploy** dan tunggu proses instalasi dependency selesai. Streamlit membaca `requirements.txt` yang berada di folder proyek ini.
+6. Setelah aplikasi aktif, atur akses publik melalui menu **Share** agar tautannya dapat dibuka orang lain.
+
 ## Hasil utama
 
 - Dataset: Breast Cancer Wisconsin (Diagnostic), 569 observasi dan 30 fitur asli; proyek memakai 10 fitur `mean`.
@@ -60,4 +101,3 @@ Atau gunakan `make setup`, `make train`, `make test`, dan `make app`.
 - Materi utama: `[ML-MODUL-01, hlm. 89–94]`, `[ML-P02, hlm. 6–12]`, dan `[ML-P07, hlm. 19–24]`.
 - **Sumber luar:** UCI Machine Learning Repository, *Breast Cancer Wisconsin (Diagnostic)*, DOI `10.24432/C5DW2B`.
 - **Sumber luar:** dokumentasi scikit-learn `load_breast_cancer`.
-
