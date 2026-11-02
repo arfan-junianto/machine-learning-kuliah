@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
+import numpy as np
 import pandas as pd
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.ensemble import RandomForestClassifier
@@ -188,4 +189,58 @@ def evaluate_model(
         "roc_auc": float(roc_auc_score(y_test, positive_scores)),
         "pr_auc": float(average_precision_score(y_test, positive_scores)),
         "confusion_matrix": confusion_matrix(y_test, predictions).tolist(),
+    }
+
+
+def bootstrap_metric_intervals(
+    model: Pipeline,
+    X_test: pd.DataFrame,
+    y_test: pd.Series,
+    n_bootstraps: int = 1000,
+    confidence_level: float = 0.95,
+    random_state: int = 42,
+) -> dict[str, dict[str, float]]:
+    """Hitung interval kepercayaan metrik dengan stratified bootstrap test set."""
+    if n_bootstraps < 2:
+        raise ValueError("n_bootstraps minimal 2")
+    if not 0.0 < confidence_level < 1.0:
+        raise ValueError("confidence_level harus berada di antara 0 dan 1")
+
+    X_ordered = _ordered_features(model, X_test)
+    predictions = np.asarray(model.predict(X_ordered))
+    probabilities = model.predict_proba(X_ordered)
+    positive_index = list(model.classes_).index(1)
+    positive_scores = probabilities[:, positive_index]
+    targets = np.asarray(y_test)
+    class_indices = [np.flatnonzero(targets == label) for label in np.unique(targets)]
+    rng = np.random.default_rng(random_state)
+    samples: dict[str, list[float]] = {
+        name: []
+        for name in ("accuracy", "precision", "recall", "f1", "f2", "roc_auc", "pr_auc")
+    }
+
+    for _ in range(n_bootstraps):
+        indices = np.concatenate(
+            [rng.choice(group, size=len(group), replace=True) for group in class_indices]
+        )
+        actual = targets[indices]
+        predicted = predictions[indices]
+        scores = positive_scores[indices]
+        samples["accuracy"].append(float(accuracy_score(actual, predicted)))
+        samples["precision"].append(
+            float(precision_score(actual, predicted, zero_division=0))
+        )
+        samples["recall"].append(float(recall_score(actual, predicted)))
+        samples["f1"].append(float(f1_score(actual, predicted)))
+        samples["f2"].append(float(fbeta_score(actual, predicted, beta=2)))
+        samples["roc_auc"].append(float(roc_auc_score(actual, scores)))
+        samples["pr_auc"].append(float(average_precision_score(actual, scores)))
+
+    alpha = 1.0 - confidence_level
+    return {
+        name: {
+            "lower": float(np.quantile(values, alpha / 2)),
+            "upper": float(np.quantile(values, 1 - alpha / 2)),
+        }
+        for name, values in samples.items()
     }

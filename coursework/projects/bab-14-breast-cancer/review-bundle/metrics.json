@@ -65,6 +65,36 @@
   "random_state": 42,
   "selected_model": "Random Forest",
   "selection_metric": "F2",
+  "test_metric_intervals": {
+    "accuracy": {
+      "lower": 0.9035087719298246,
+      "upper": 0.9824561403508771
+    },
+    "f1": {
+      "lower": 0.8717948717948718,
+      "upper": 0.9767441860465116
+    },
+    "f2": {
+      "lower": 0.861244019138756,
+      "upper": 0.9859154929577465
+    },
+    "pr_auc": {
+      "lower": 0.9430251466506412,
+      "upper": 0.9966353631833281
+    },
+    "precision": {
+      "lower": 0.8541666666666666,
+      "upper": 1.0
+    },
+    "recall": {
+      "lower": 0.8571428571428571,
+      "upper": 1.0
+    },
+    "roc_auc": {
+      "lower": 0.9665922619047619,
+      "upper": 0.998015873015873
+    }
+  },
   "test_metrics": {
     "accuracy": 0.9473684210526315,
     "confusion_matrix": [

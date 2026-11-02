@@ -284,39 +284,48 @@
 <tr>
 <th>Metrik</th>
 <th style="text-align: right;">Nilai</th>
+<th style="text-align: right;">95% CI bootstrap</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Accuracy</td>
 <td style="text-align: right;">0,9474</td>
+<td style="text-align: right;">0,9035–0,9825</td>
 </tr>
 <tr>
 <td>Precision ganas</td>
 <td style="text-align: right;">0,9286</td>
+<td style="text-align: right;">0,8542–1,0000</td>
 </tr>
 <tr>
 <td>Recall ganas</td>
 <td style="text-align: right;">0,9286</td>
+<td style="text-align: right;">0,8571–1,0000</td>
 </tr>
 <tr>
 <td>F1</td>
 <td style="text-align: right;">0,9286</td>
+<td style="text-align: right;">0,8718–0,9767</td>
 </tr>
 <tr>
 <td>F2</td>
 <td style="text-align: right;">0,9286</td>
+<td style="text-align: right;">0,8612–0,9859</td>
 </tr>
 <tr>
 <td>ROC-AUC</td>
 <td style="text-align: right;">0,9848</td>
+<td style="text-align: right;">0,9666–0,9980</td>
 </tr>
 <tr>
 <td>PR-AUC</td>
 <td style="text-align: right;">0,9740</td>
+<td style="text-align: right;">0,9430–0,9966</td>
 </tr>
 </tbody>
 </table>
+<p>Interval dihitung dari 1.000 stratified bootstrap resample pada test set dengan seed 42. Bootstrap digunakan untuk menggambarkan ketidakpastian akibat ukuran test set yang terbatas dan tidak dipakai untuk memilih model atau hyperparameter. Metode interval bootstrap ini merupakan <strong>pengetahuan umum di luar knowledge base</strong>.</p>
 <p><img alt="Confusion matrix" src="confusion_matrix.png" /></p>
 <p>Confusion matrix menghasilkan TN=69, FP=3, FN=3, dan TP=39. Artinya 39 dari 42 kasus ganas terdeteksi; tiga kasus ganas terlewat. Recall mengukur proporsi kasus positif aktual yang ditemukan, yaitu <code>TP/(TP+FN)</code> [ML-P07, hlm. 9]. F1 menyeimbangkan precision dan recall [ML-P07, hlm. 10], sedangkan F2 pada proyek ini memberi bobot recall lebih besar.</p>
 <p><img alt="ROC dan Precision-Recall" src="roc_pr_curves.png" /></p>

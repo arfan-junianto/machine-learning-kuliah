@@ -47,6 +47,7 @@ def _assert_artifact_contract(output_dir: Path):
         "feature_metadata",
         "target_mapping",
         "test_metrics",
+        "test_metric_intervals",
     }
     assert len(bundle["features"]) == 10
     assert set(bundle["feature_metadata"]) == set(bundle["features"])
@@ -56,6 +57,7 @@ def _assert_artifact_contract(output_dir: Path):
     metrics = json.loads((output_dir / "metrics.json").read_text())
     assert metrics["selected_model"] == bundle["model_name"]
     assert metrics["test_metrics"] == bundle["test_metrics"]
+    assert metrics["test_metric_intervals"] == bundle["test_metric_intervals"]
     assert len(metrics["cv_comparison"]) == 3
     return metrics
 
@@ -82,4 +84,3 @@ def test_run_training_creates_complete_reproducible_artifacts(tmp_path):
     assert first["selected_model"] == second["selected_model"]
     assert first["test_metrics"] == second["test_metrics"]
     assert first["cv_comparison"] == second["cv_comparison"]
-

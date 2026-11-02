@@ -14,7 +14,12 @@ from .artifacts import (
     save_plots,
 )
 from .data import load_project_data, split_data
-from .modeling import evaluate_model, select_best_model, tune_models
+from .modeling import (
+    bootstrap_metric_intervals,
+    evaluate_model,
+    select_best_model,
+    tune_models,
+)
 
 
 def run_training(
@@ -44,6 +49,12 @@ def run_training(
     selected_name = select_best_model(cv_results)
     selected_model = estimators[selected_name]
     test_metrics = evaluate_model(selected_model, X_test, y_test)
+    test_metric_intervals = bootstrap_metric_intervals(
+        selected_model,
+        X_test,
+        y_test,
+        random_state=random_state,
+    )
     feature_metadata = build_feature_metadata(X_train)
 
     bundle = {
@@ -53,6 +64,7 @@ def run_training(
         "feature_metadata": feature_metadata,
         "target_mapping": source_metadata["target_mapping"],
         "test_metrics": test_metrics,
+        "test_metric_intervals": test_metric_intervals,
     }
     save_bundle(output_dir / "model_bundle.joblib", bundle)
 
@@ -95,6 +107,6 @@ def run_training(
         },
         "cv_comparison": cv_results.to_dict(orient="records"),
         "test_metrics": test_metrics,
+        "test_metric_intervals": test_metric_intervals,
     }
     return save_json(output_dir / "metrics.json", metrics)
-

@@ -5,6 +5,7 @@ import warnings
 import pandas as pd
 import pytest
 
+from breast_cancer_project import modeling
 from breast_cancer_project.data import load_project_data, split_data
 from breast_cancer_project.modeling import (
     SCORING,
@@ -129,3 +130,36 @@ def test_evaluate_model_rejects_missing_feature():
 
     with pytest.raises(ValueError, match="Kolom input tidak sesuai"):
         evaluate_model(model, X_test.drop(columns=[X_test.columns[0]]), y_test)
+
+
+def test_bootstrap_metric_intervals_are_deterministic_and_bounded():
+    X, y, _ = load_project_data()
+    X_train, X_test, y_train, y_test = split_data(X, y)
+    results, estimators = tune_models(
+        X_train,
+        y_train,
+        cv_splits=2,
+        model_specs=_one_combination_per_model(),
+    )
+    model = estimators[select_best_model(results)]
+
+    first = modeling.bootstrap_metric_intervals(
+        model, X_test, y_test, n_bootstraps=100, random_state=42
+    )
+    second = modeling.bootstrap_metric_intervals(
+        model, X_test, y_test, n_bootstraps=100, random_state=42
+    )
+
+    assert first == second
+    assert set(first) == {
+        "accuracy",
+        "precision",
+        "recall",
+        "f1",
+        "f2",
+        "roc_auc",
+        "pr_auc",
+    }
+    for interval in first.values():
+        assert set(interval) == {"lower", "upper"}
+        assert 0.0 <= interval["lower"] <= interval["upper"] <= 1.0

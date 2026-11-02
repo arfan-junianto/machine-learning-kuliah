@@ -51,6 +51,7 @@ Pemilik deployment perlu menjadikannya publik melalui aplikasi Streamlit:
 - Model yang dibandingkan: Logistic Regression, SVM-RBF, dan Random Forest.
 - Model terpilih: **Random Forest** berdasarkan F2 rata-rata CV tertinggi, `0,934 ± 0,021`.
 - Test set: accuracy `94,74%`, recall ganas `92,86%`, F1 `92,86%`, ROC-AUC `0,9848`, dan PR-AUC `0,9740`.
+- Ketidakpastian test: 95% bootstrap CI accuracy `90,35%–98,25%` dan recall ganas `85,71%–100%` (1.000 stratified resample, seed 42).
 - Confusion matrix: TN=69, FP=3, FN=3, TP=39.
 
 Angka lengkap ada di [`artifacts/metrics.json`](artifacts/metrics.json) dan pembahasannya di [`report.md`](report.md).
@@ -94,6 +95,7 @@ Atau gunakan `make setup`, `make train`, `make test`, dan `make app`.
 - Tuning: `GridSearchCV`, Stratified 5-Fold, `refit="f2"`.
 - Semua scaling berada di dalam `Pipeline`, sehingga di-fit hanya pada fold training.
 - Test set tidak dipakai dalam tuning atau pemilihan model; test dibuka sekali setelah pemenang CV ditetapkan.
+- Interval kepercayaan dihitung setelah evaluasi final dan hanya dipakai untuk melaporkan ketidakpastian, bukan memilih model.
 - Bundle deployment berisi model, urutan fitur, rentang input, mapping target, dan metrik test.
 
 ## Sumber

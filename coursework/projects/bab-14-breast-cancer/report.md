@@ -88,15 +88,17 @@ Random Forest dipilih karena F2 dan recall CV tertinggi, PR-AUC tertinggi, serta
 
 ### 5.2 Evaluasi final pada test set
 
-| Metrik | Nilai |
-|---|---:|
-| Accuracy | 0,9474 |
-| Precision ganas | 0,9286 |
-| Recall ganas | 0,9286 |
-| F1 | 0,9286 |
-| F2 | 0,9286 |
-| ROC-AUC | 0,9848 |
-| PR-AUC | 0,9740 |
+| Metrik | Nilai | 95% CI bootstrap |
+|---|---:|---:|
+| Accuracy | 0,9474 | 0,9035–0,9825 |
+| Precision ganas | 0,9286 | 0,8542–1,0000 |
+| Recall ganas | 0,9286 | 0,8571–1,0000 |
+| F1 | 0,9286 | 0,8718–0,9767 |
+| F2 | 0,9286 | 0,8612–0,9859 |
+| ROC-AUC | 0,9848 | 0,9666–0,9980 |
+| PR-AUC | 0,9740 | 0,9430–0,9966 |
+
+Interval dihitung dari 1.000 stratified bootstrap resample pada test set dengan seed 42. Bootstrap digunakan untuk menggambarkan ketidakpastian akibat ukuran test set yang terbatas dan tidak dipakai untuk memilih model atau hyperparameter. Metode interval bootstrap ini merupakan **pengetahuan umum di luar knowledge base**.
 
 ![Confusion matrix](artifacts/figures/confusion_matrix.png)
 
@@ -148,4 +150,3 @@ Mini project memenuhi alur CRISP-DM end-to-end dan requirement Bab 14. Dari tiga
 
 - Wolberg, W., Mangasarian, O., Street, N., & Street, W. (1993). *Breast Cancer Wisconsin (Diagnostic)*. UCI Machine Learning Repository. <https://doi.org/10.24432/C5DW2B>.
 - Scikit-learn. *load_breast_cancer documentation*. <https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html>.
-
