@@ -1,0 +1,39 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            coursework/projects/bab-14-breast-cancer/requirements.txt
+
+      - name: Install test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r coursework/projects/bab-14-breast-cancer/requirements.txt
+          python -m pip install "nbformat>=5.10,<6"
+
+      - name: Test notebooks and Mini Project Bab 14
+        env:
+          MPLCONFIGDIR: /tmp/ml-mpl
+        run: |
+          pytest -p no:cacheprovider coursework/projects/implementasi-modul-machine-learning/tests coursework/projects/bab-14-breast-cancer/tests -q
+

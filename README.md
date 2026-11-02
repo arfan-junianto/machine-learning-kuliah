@@ -1,5 +1,7 @@
 # Machine Learning Coursework
 
+[![Tests](https://github.com/arfan-junianto/machine-learning-kuliah/actions/workflows/tests.yml/badge.svg)](https://github.com/arfan-junianto/machine-learning-kuliah/actions/workflows/tests.yml)
+
 Kumpulan tugas, notebook implementasi, dan mini project mata kuliah Machine Learning. Repository ini dirancang agar setiap pekerjaan dapat dibaca di GitHub dan dijalankan ulang secara reproducible.
 
 ## Akses Cepat
