@@ -28,6 +28,7 @@ def browser():
 
 
 def load_layout(browser, width, media="screen"):
+    browser.execute_cdp_cmd("Emulation.clearDeviceMetricsOverride", {})
     browser.execute_cdp_cmd("Emulation.setEmulatedMedia", {"media": media})
     browser.set_window_size(width, 900)
     browser.get(HTML_PATH.as_uri())
@@ -52,6 +53,33 @@ def load_layout(browser, width, media="screen"):
     )
 
 
+def load_mobile_layout(browser):
+    browser.execute_cdp_cmd(
+        "Emulation.setDeviceMetricsOverride",
+        {"width": 390, "height": 844, "deviceScaleFactor": 3, "mobile": True},
+    )
+    browser.execute_cdp_cmd("Emulation.setEmulatedMedia", {"media": "screen"})
+    browser.get(HTML_PATH.as_uri())
+    return browser.execute_script(
+        """
+        const section = document.querySelector('.section.first');
+        const cover = document.querySelector('.cover');
+        const subtitle = document.querySelector('.subtitle');
+        const heading = document.querySelector('.cover h1');
+        return {
+          innerWidth: window.innerWidth,
+          clientWidth: document.documentElement.clientWidth,
+          documentWidth: document.documentElement.scrollWidth,
+          sectionPaddingLeft: parseFloat(getComputedStyle(section).paddingLeft),
+          sectionPaddingRight: parseFloat(getComputedStyle(section).paddingRight),
+          coverPaddingLeft: parseFloat(getComputedStyle(cover).paddingLeft),
+          subtitleAlign: getComputedStyle(subtitle).textAlign,
+          headingSize: parseFloat(getComputedStyle(heading).fontSize),
+        };
+        """
+    )
+
+
 def test_desktop_content_is_centered_with_readable_gutters(browser):
     layout = load_layout(browser, 1440)
 
@@ -65,32 +93,19 @@ def test_desktop_content_is_centered_with_readable_gutters(browser):
 
 
 def test_mobile_content_keeps_padding_without_horizontal_overflow(browser):
-    layout = load_layout(browser, 390)
+    layout = load_mobile_layout(browser)
 
-    assert layout["paddingLeft"] >= 18
-    assert layout["paddingRight"] >= 18
+    assert layout["innerWidth"] == 390
+    assert layout["clientWidth"] == 390
+    assert layout["sectionPaddingLeft"] >= 18
+    assert layout["sectionPaddingRight"] >= 18
     assert layout["documentWidth"] <= layout["clientWidth"]
 
 
 def test_mobile_cover_keeps_readable_text_width(browser):
-    browser.execute_cdp_cmd("Emulation.setEmulatedMedia", {"media": "screen"})
-    browser.set_window_size(390, 900)
-    browser.get(HTML_PATH.as_uri())
-    layout = browser.execute_script(
-        """
-        const cover = document.querySelector('.cover');
-        const subtitle = document.querySelector('.subtitle');
-        const heading = document.querySelector('.cover h1');
-        return {
-          coverPaddingLeft: parseFloat(getComputedStyle(cover).paddingLeft),
-          subtitleAlign: getComputedStyle(subtitle).textAlign,
-          headingSize: parseFloat(getComputedStyle(heading).fontSize),
-          documentWidth: document.documentElement.scrollWidth,
-          clientWidth: document.documentElement.clientWidth,
-        };
-        """
-    )
+    layout = load_mobile_layout(browser)
 
+    assert layout["innerWidth"] == 390
     assert layout["coverPaddingLeft"] <= 24
     assert layout["subtitleAlign"] == "left"
     assert layout["headingSize"] <= 40
