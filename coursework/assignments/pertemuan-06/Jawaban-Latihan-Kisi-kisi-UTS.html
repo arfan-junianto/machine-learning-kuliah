@@ -12,6 +12,21 @@ p{margin:2.5mm 0;text-align:justify} strong{color:#0d3b56} code{font-family:"Dej
 ul.clean,ol.steps{padding-left:7mm;margin:3mm 0} li{margin:1.5mm 0} .cite{color:#486a7c;font-size:9pt;font-weight:600;white-space:nowrap}
 figure{margin:5mm 0 7mm;break-inside:avoid;border:1px solid #d7e2e8;border-radius:3mm;padding:3mm;background:#fafcfd} figure img{display:block;width:100%;height:auto} figcaption{text-align:center;color:#557084;font-size:8.8pt;margin-top:2mm}
 .note{background:#fff4e9;border-left:5px solid #ef8354;padding:4mm;border-radius:2mm} footer{margin-top:10mm;border-top:1px solid #ccd8df;padding-top:3mm;color:#667d8b;font-size:8.5pt}
+@media screen {
+  body{background:#edf2f5}
+  .toc,.section,footer{width:100%;max-width:1180px;margin-left:auto;margin-right:auto;padding-left:clamp(18px,4vw,48px);padding-right:clamp(18px,4vw,48px);background:white}
+  .section{padding-top:32px;padding-bottom:32px}
+  .table-wrap,.formula{max-width:100%;overflow-x:auto}
+  .cite{white-space:normal}
+  .cover-grid{flex-wrap:wrap}
+}
+@media screen and (max-width:600px) {
+  .cover{height:auto;min-height:100vh;padding:48px 24px}
+  .cover h1{font-size:28pt}
+  .subtitle{font-size:13pt;text-align:left}
+  .cover-grid{gap:12px;margin-top:32px}
+  .cover-card{flex:1 1 120px;padding:14px 16px}
+}
 </style></head><body>
 <section class="cover"><div class="eyebrow">Machine Learning • Latihan UTS</div><h1>Jawaban Latihan<br>Kisi-kisi UTS</h1><p class="subtitle">Pembahasan terstruktur, perhitungan tiga desimal, visualisasi, dan sitasi materi kuliah.</p><div class="cover-grid"><div class="cover-card"><strong>5</strong><br>Topik utama</div><div class="cover-card"><strong>18</strong><br>Subbutir</div><div class="cover-card"><strong>4</strong><br>Grafik analisis</div></div></section>
 <section class="toc"><h2>Daftar Isi</h2><ol><li><a href="#1-studi-kasus-prediksi-keterlambatan-kirimcepat">1. Studi Kasus Prediksi Keterlambatan KirimCepat</a></li><li><a href="#2-data-preparation-dan-imbalanced-data">2. Data Preparation dan Imbalanced Data</a></li><li><a href="#3-feature-selection-dan-feature-engineering">3. Feature Selection dan Feature Engineering</a></li><li><a href="#4-decision-tree">4. Decision Tree</a></li><li><a href="#5-k-nearest-neighbors">5. K-Nearest Neighbors</a></li><li><a href="#kesimpulan-singkat">Kesimpulan Singkat</a></li></ol><div class="note">Jawaban disusun berdasarkan knowledge base mata kuliah. Sitasi menggunakan format ID dokumen dan halaman.</div></section>

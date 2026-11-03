@@ -30,9 +30,10 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r coursework/projects/bab-14-breast-cancer/requirements.txt
           python -m pip install "nbformat>=5.10,<6"
+          python -m pip install "selenium>=4.52,<5"
 
       - name: Test notebooks and Mini Project Bab 14
         env:
           MPLCONFIGDIR: /tmp/ml-mpl
         run: |
-          pytest -p no:cacheprovider coursework/projects/implementasi-modul-machine-learning/tests coursework/projects/bab-14-breast-cancer/tests -q
+          pytest -p no:cacheprovider coursework/assignments/pertemuan-06/tests coursework/projects/implementasi-modul-machine-learning/tests coursework/projects/bab-14-breast-cancer/tests -q
