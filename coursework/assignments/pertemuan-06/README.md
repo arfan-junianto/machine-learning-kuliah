@@ -8,7 +8,7 @@ Paket tugas ini berisi soal dan jawaban latihan terpadu Machine Learning. Pembah
 |---|---|
 | [`Soal-Latihan-Kisi-kisi-UTS.pdf`](Soal-Latihan-Kisi-kisi-UTS.pdf) | Soal asli, 2 halaman |
 | [`Jawaban-Latihan-Kisi-kisi-UTS.md`](Jawaban-Latihan-Kisi-kisi-UTS.md) | Sumber jawaban yang mudah ditinjau dan diedit |
-| [`Jawaban-Latihan-Kisi-kisi-UTS.html`](Jawaban-Latihan-Kisi-kisi-UTS.html) | Versi siap baca di browser |
+| [Open rendered HTML](https://arfan-junianto.github.io/machine-learning-kuliah/Jawaban-Latihan-Kisi-kisi-UTS.html) | Versi siap baca di browser |
 | [`Jawaban-Latihan-Kisi-kisi-UTS.pdf`](Jawaban-Latihan-Kisi-kisi-UTS.pdf) | Versi siap dikumpulkan, 14 halaman |
 | [`visuals/`](visuals/) | Grafik pendukung jawaban |
 

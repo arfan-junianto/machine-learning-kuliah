@@ -6,12 +6,12 @@ Kumpulan tugas, notebook implementasi, dan mini project mata kuliah Machine Lear
 
 ## Akses Cepat
 
-| Bagian | Isi | Tautan |
+| Bagian | Isi | Link |
 |---|---|---|
-| Implementasi Bab 1–13 | Notebook mandiri, dokumentasi, dan tombol Google Colab | [Buka indeks](coursework/projects/implementasi-modul-machine-learning/README.md) |
-| Mini Project Bab 14 | Training, evaluasi, laporan, presentasi, pengujian, dan aplikasi Streamlit | [Buka proyek](coursework/projects/bab-14-breast-cancer/README.md) |
-| Live Demo Bab 14 | Aplikasi skrining risiko kanker payudara untuk demonstrasi akademik | [Buka Streamlit](https://machine-learning-kuliah-edg2ydcbvp2yjsu7weh5dx.streamlit.app/) |
-| Latihan Kisi-kisi UTS | Soal dan jawaban Pertemuan 6 dalam Markdown, HTML, dan PDF | [Buka tugas](coursework/assignments/pertemuan-06/README.md) |
+| Implementasi Bab 1–13 | Notebook mandiri, dokumentasi, dan tombol Google Colab | [View Index](coursework/projects/implementasi-modul-machine-learning/README.md) |
+| Mini Project Bab 14 | Training, evaluasi, laporan, presentasi, pengujian, dan aplikasi Streamlit | [View Project](coursework/projects/bab-14-breast-cancer/README.md) |
+| Live Demo Bab 14 | Aplikasi skrining risiko kanker payudara untuk demonstrasi akademik | [Open Streamlit](https://machine-learning-kuliah-edg2ydcbvp2yjsu7weh5dx.streamlit.app/) |
+| Latihan Kisi-kisi UTS | Soal dan jawaban Pertemuan 6 dalam Markdown, HTML, dan PDF | [View Assignment](https://arfan-junianto.github.io/machine-learning-kuliah/Jawaban-Latihan-Kisi-kisi-UTS.html) |
 
 ## Struktur Publik
 
