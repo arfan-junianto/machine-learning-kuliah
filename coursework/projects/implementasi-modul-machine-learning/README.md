@@ -63,6 +63,10 @@ Notebook klasik Bab 1–11 dapat diuji berurutan tanpa menyimpan output:
 .venv/bin/python coursework/projects/implementasi-modul-machine-learning/scripts/smoke_run_classic_notebooks.py
 ```
 
+Suite pytest juga menjalankan quality gate anti-leakage berbasis AST. Pemeriksaan ini mengikuti asal train/validation/test dari `train_test_split`, menolak `GridSearchCV` yang di-fit pada holdout, dan mendeteksi metrik holdout yang dipakai untuk memilih kandidat. Evaluasi final pada test set tetap diperbolehkan.
+
+Latihan praktikum Bab 4, 7, 8, dan 10 mempunyai kontrak kelengkapan tersendiri. Bab 4 menjalankan pipeline Titanic sesuai modul; ketika `seaborn.load_dataset("titanic")` tidak tersedia, notebook memakai fallback deterministik dengan skema yang sama agar smoke test tetap dapat berjalan tanpa jaringan.
+
 Notebook Bab 1–11 dan 13 dibangun deterministik dengan:
 
 ```bash
