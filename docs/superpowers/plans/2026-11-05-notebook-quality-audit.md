@@ -75,4 +75,3 @@
 - [ ] **Step 3: Regenerasi notebook sekali lagi dan pastikan `git diff` tidak berubah (deterministik).**
 - [ ] **Step 4: Dokumentasikan tes anti-leakage semantik dan perintah verifikasi di README.**
 - [ ] **Step 5: Jalankan suite final dan periksa hanya file dalam scope yang berubah.**
-

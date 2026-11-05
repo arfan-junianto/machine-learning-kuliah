@@ -54,4 +54,3 @@ Regenerasi notebook, validasi JSON/sintaks/struktur, jalankan tes anti-leakage d
 - Mengoptimalkan skor model untuk mendapatkan angka tertinggi.
 - Mengganti dataset atau arsitektur Bab 12–14.
 - Menjalankan training TensorFlow penuh secara lokal.
-
