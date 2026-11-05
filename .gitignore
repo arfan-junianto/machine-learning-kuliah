@@ -29,6 +29,7 @@ Thumbs.db
 /.agents/
 /.codex/
 /.superpowers/
+/.worktrees/
 
 # Raw imports already normalized into library/sources/pdf/
 /archive/imports/
