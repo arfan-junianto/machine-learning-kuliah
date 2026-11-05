@@ -642,6 +642,88 @@ register(
             """,
         ),
         (
+            "markdown",
+            """
+            ## Latihan 2: pipeline lengkap pada Titanic
+
+            Sesuai instruksi modul, latihan ini memakai fitur numerik `age` dan `fare`, fitur kategorikal `sex` dan `embarked`, lalu membungkus imputasi, scaling, one-hot encoding, dan Logistic Regression dalam satu Pipeline [ML-MODUL-01, hlm. 34]. Jika dataset seaborn tidak dapat diunduh, notebook memakai data fallback dengan skema yang sama agar tetap dapat diuji secara offline.
+            """,
+        ),
+        (
+            "code",
+            """
+            try:
+                import seaborn as sns
+
+                titanic = sns.load_dataset("titanic")[
+                    ["age", "fare", "sex", "embarked", "survived"]
+                ].copy()
+                titanic_source = "seaborn Titanic"
+            except Exception:
+                titanic_rng = np.random.default_rng(SEED)
+                fallback_size = 160
+                fallback_sex = titanic_rng.choice(["female", "male"], fallback_size)
+                fallback_embarked = titanic_rng.choice(["C", "Q", "S"], fallback_size)
+                fallback_age = titanic_rng.normal(30, 14, fallback_size).clip(1, 80)
+                fallback_fare = titanic_rng.lognormal(3.0, 0.8, fallback_size).clip(4, 300)
+                survival_probability = (
+                    0.15
+                    + 0.50 * (fallback_sex == "female")
+                    + 0.15 * (fallback_age < 16)
+                    + 0.10 * (fallback_fare > np.median(fallback_fare))
+                ).clip(0.05, 0.95)
+                titanic = pd.DataFrame({
+                    "age": fallback_age,
+                    "fare": fallback_fare,
+                    "sex": fallback_sex,
+                    "embarked": fallback_embarked,
+                    "survived": titanic_rng.binomial(1, survival_probability),
+                })
+                titanic.loc[::13, "age"] = np.nan
+                titanic.loc[::17, "embarked"] = np.nan
+                titanic_source = "fallback offline berskema Titanic"
+
+            titanic = titanic.dropna(subset=["survived"]).copy()
+            print("Sumber data:", titanic_source, "| ukuran:", titanic.shape)
+            display(titanic.head())
+            """,
+        ),
+        (
+            "code",
+            """
+            titanic_numeric_features = ["age", "fare"]
+            titanic_categorical_features = ["sex", "embarked"]
+            titanic_features = titanic_numeric_features + titanic_categorical_features
+
+            titanic_preprocessor = ColumnTransformer([
+                ("numeric", Pipeline([
+                    ("imputer", SimpleImputer(strategy="median")),
+                    ("scaler", StandardScaler()),
+                ]), titanic_numeric_features),
+                ("categorical", Pipeline([
+                    ("imputer", SimpleImputer(strategy="most_frequent")),
+                    ("onehot", OneHotEncoder(handle_unknown="ignore")),
+                ]), titanic_categorical_features),
+            ])
+            titanic_pipeline = Pipeline([
+                ("preprocessing", titanic_preprocessor),
+                ("model", LogisticRegression(max_iter=2000, random_state=SEED)),
+            ])
+
+            X_titanic_train, X_titanic_test, y_titanic_train, y_titanic_test = train_test_split(
+                titanic[titanic_features],
+                titanic["survived"].astype(int),
+                test_size=0.2,
+                random_state=SEED,
+                stratify=titanic["survived"].astype(int),
+            )
+            titanic_pipeline.fit(X_titanic_train, y_titanic_train)
+            titanic_prediction = titanic_pipeline.predict(X_titanic_test)
+            titanic_test_accuracy = accuracy_score(y_titanic_test, titanic_prediction)
+            print(f"Akurasi test Titanic: {titanic_test_accuracy:.3f}")
+            """,
+        ),
+        (
             "code",
             """
             new_property = pd.DataFrame([{

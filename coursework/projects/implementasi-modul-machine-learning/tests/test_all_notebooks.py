@@ -106,10 +106,38 @@ def test_model_selection_does_not_tune_on_test_set(chapter, required_marker, for
 @pytest.mark.parametrize(
     ("chapter", "markers"),
     [
-        (4, ("selected_feature_names", "filter_features", "rfe_features", "embedded_features")),
-        (7, ("exercise_axes", "exercise_roc", "exercise_pr")),
-        (8, ("boundary_configs", "kernel_cv_scores")),
-        (10, ("dbscan_silhouette", "selected_business_model", "cluster_summary")),
+        (4, (
+            "selected_feature_names",
+            "filter_features",
+            "rfe_features",
+            "embedded_features",
+            "titanic_numeric_features",
+            "titanic_categorical_features",
+            "titanic_pipeline",
+            "titanic_test_accuracy",
+        )),
+        (7, (
+            "report_models",
+            "exercise_axes",
+            "exercise_roc",
+            "exercise_pr",
+            "model_list",
+            "StratifiedKFold",
+        )),
+        (8, (
+            "kernel_cv_scores",
+            "selected_features",
+            "boundary_configs",
+            "boundary_axes",
+        )),
+        (10, (
+            "k_values = range(2, 11)",
+            "inertias",
+            "silhouettes",
+            "dbscan_silhouette",
+            "selected_business_model",
+            "cluster_summary",
+        )),
     ],
 )
 def test_practical_exercises_include_required_comparison_outputs(chapter, markers):
