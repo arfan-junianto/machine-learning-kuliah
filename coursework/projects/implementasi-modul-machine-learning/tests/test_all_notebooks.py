@@ -4,6 +4,8 @@ from pathlib import Path
 import nbformat
 import pytest
 
+from notebook_quality import assert_no_model_selection_leakage
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOKS_ROOT = PROJECT_ROOT / "notebooks"
@@ -69,6 +71,19 @@ def notebook_source(chapter):
     folder, filename, _, _ = CHAPTERS[chapter]
     notebook = nbformat.read(NOTEBOOKS_ROOT / folder / filename, as_version=4)
     return "\n".join(cell.source for cell in notebook.cells)
+
+
+def notebook_code_source(chapter):
+    folder, filename, _, _ = CHAPTERS[chapter]
+    notebook = nbformat.read(NOTEBOOKS_ROOT / folder / filename, as_version=4)
+    return "\n".join(
+        cell.source for cell in notebook.cells if cell.cell_type == "code"
+    )
+
+
+@pytest.mark.parametrize("chapter", CHAPTERS)
+def test_notebook_model_selection_is_semantically_free_from_holdout_leakage(chapter):
+    assert_no_model_selection_leakage(notebook_code_source(chapter))
 
 
 @pytest.mark.parametrize(
