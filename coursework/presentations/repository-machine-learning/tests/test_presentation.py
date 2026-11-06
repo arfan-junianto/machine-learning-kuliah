@@ -67,14 +67,13 @@ def test_deck_has_ten_indonesian_slides_with_embedded_notes() -> None:
     assert parser.notes_count == 10
 
 
-def test_deck_contains_the_public_demo_routes_and_identity_placeholder() -> None:
+def test_deck_contains_the_public_demo_routes_and_presenter_identity() -> None:
     html = read_presentation()
 
     assert "https://github.com/arfan-junianto/machine-learning-kuliah" in html
     assert "https://colab.research.google.com/github/arfan-junianto/" in html
     assert "machine-learning-kuliah-edg2ydcbvp2yjsu7weh5dx.streamlit.app" in html
     assert "Arfan Junianto" in html
-    assert "[NIM]" in html
 
 
 def test_deck_keeps_medical_scope_and_course_citation_explicit() -> None:
