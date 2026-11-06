@@ -9,7 +9,7 @@ Kumpulan tugas, notebook implementasi, dan mini project mata kuliah Machine Lear
 | Bagian | Isi | Link |
 |---|---|---|
 | Implementasi Bab 1–13 | Notebook mandiri, dokumentasi, dan tombol Google Colab | [View Index](coursework/projects/implementasi-modul-machine-learning/README.md) |
-| Mini Project Bab 14 | Training, evaluasi, laporan, presentasi, pengujian, dan aplikasi Streamlit | [View Project](coursework/projects/bab-14-breast-cancer/README.md) |
+| Mini Project Bab 14 | Notebook Colab, training, evaluasi, laporan, presentasi, pengujian, dan aplikasi Streamlit | [View Project](coursework/projects/bab-14-breast-cancer/README.md) · [Open Colab](https://colab.research.google.com/github/arfan-junianto/machine-learning-kuliah/blob/main/coursework/projects/bab-14-breast-cancer/notebooks/mini-project-bab-14-breast-cancer.ipynb) |
 | Live Demo Bab 14 | Aplikasi skrining risiko kanker payudara untuk demonstrasi akademik | [Open Streamlit](https://machine-learning-kuliah-edg2ydcbvp2yjsu7weh5dx.streamlit.app/) |
 | Latihan Kisi-kisi UTS | Soal dan jawaban Pertemuan 6 dalam Markdown, HTML, dan PDF | [View Assignment](https://arfan-junianto.github.io/machine-learning-kuliah/Jawaban-Latihan-Kisi-kisi-UTS.html) |
 | Presentasi Repository (offline) | Deck 10 slide mandiri dengan catatan pembicara dan visual fallback | [Buka Presentasi](https://arfan-junianto.github.io/machine-learning-kuliah/Presentasi-Repository-Machine-Learning.html) |
