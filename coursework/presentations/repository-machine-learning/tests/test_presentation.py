@@ -1,5 +1,12 @@
 from html.parser import HTMLParser
 from pathlib import Path
+import shutil
+
+import pytest
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 
 PRESENTATION_DIR = Path(__file__).resolve().parents[1]
@@ -82,3 +89,91 @@ def test_deck_is_portable_without_embedded_pages_or_resource_dependencies() -> N
     assert parser.iframe_count == 0
     assert parser.external_resources == []
     assert "fetch(" not in html
+
+
+@pytest.fixture(scope="module")
+def browser():
+    options = Options()
+    options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    chrome_binary = shutil.which("google-chrome") or shutil.which("chromium")
+    if chrome_binary:
+        options.binary_location = chrome_binary
+
+    driver = webdriver.Chrome(options=options)
+    driver.get(PRESENTATION.as_uri())
+    yield driver
+    driver.quit()
+
+
+def active_slide_index(browser) -> int:
+    return browser.execute_script(
+        "return [...document.querySelectorAll('.slide')].findIndex(s => s.classList.contains('active'));"
+    )
+
+
+def test_deck_starts_on_one_slide_and_supports_keyboard_navigation(browser) -> None:
+    assert len(browser.find_elements(By.CSS_SELECTOR, ".slide.active")) == 1
+    assert active_slide_index(browser) == 0
+
+    browser.find_element(By.TAG_NAME, "body").send_keys(Keys.ARROW_RIGHT)
+    assert active_slide_index(browser) == 1
+
+    browser.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
+    assert active_slide_index(browser) == 9
+
+    browser.find_element(By.TAG_NAME, "body").send_keys(Keys.HOME)
+    assert active_slide_index(browser) == 0
+
+
+def test_mouse_controls_and_progress_report_the_current_slide(browser) -> None:
+    browser.find_element(By.TAG_NAME, "body").send_keys(Keys.HOME)
+    browser.find_element(By.ID, "next-slide").click()
+
+    assert active_slide_index(browser) == 1
+    assert browser.find_element(By.ID, "slide-status").text == "2 / 10"
+    assert browser.find_element(By.ID, "slide-progress").get_attribute("style") == "width: 20%;"
+
+    browser.find_element(By.ID, "previous-slide").click()
+    assert active_slide_index(browser) == 0
+
+
+def test_speaker_notes_are_hidden_by_default_and_toggle_with_n(browser) -> None:
+    browser.refresh()
+    notes = browser.find_element(By.ID, "notes-panel")
+
+    assert notes.get_attribute("aria-hidden") == "true"
+    assert not notes.is_displayed()
+
+    browser.find_element(By.TAG_NAME, "body").send_keys("n")
+    assert notes.get_attribute("aria-hidden") == "false"
+    assert notes.is_displayed()
+    assert "Selamat pagi/siang" in notes.text
+
+    browser.find_element(By.TAG_NAME, "body").send_keys("n")
+    assert not notes.is_displayed()
+
+
+@pytest.mark.parametrize("width,height", [(1366, 768), (1920, 1080)])
+def test_every_slide_fits_common_projector_viewports(browser, width: int, height: int) -> None:
+    browser.set_window_size(width, height)
+    browser.find_element(By.TAG_NAME, "body").send_keys(Keys.HOME)
+
+    for index in range(10):
+        if index:
+            browser.find_element(By.TAG_NAME, "body").send_keys(Keys.ARROW_RIGHT)
+        dimensions = browser.execute_script(
+            """
+            const slide = document.querySelector('.slide.active');
+            return {
+              width: slide.clientWidth,
+              height: slide.clientHeight,
+              scrollWidth: slide.scrollWidth,
+              scrollHeight: slide.scrollHeight
+            };
+            """
+        )
+        assert dimensions["scrollWidth"] <= dimensions["width"] + 1, f"slide {index + 1} overflow horizontal"
+        assert dimensions["scrollHeight"] <= dimensions["height"] + 1, f"slide {index + 1} overflow vertical"
