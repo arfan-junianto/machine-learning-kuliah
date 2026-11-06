@@ -13,6 +13,7 @@ PRESENTATION_DIR = Path(__file__).resolve().parents[1]
 PRESENTATION = PRESENTATION_DIR / "Presentasi-Repository-Machine-Learning.html"
 REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
 ROOT_README = REPOSITORY_ROOT / "README.md"
+PAGES_WORKFLOW = REPOSITORY_ROOT / ".github" / "workflows" / "pages.yml"
 
 
 class PresentationParser(HTMLParser):
@@ -186,6 +187,19 @@ def test_root_readme_links_the_offline_repository_presentation() -> None:
 
     assert "Presentasi Repository (offline)" in readme
     assert (
-        "coursework/presentations/repository-machine-learning/"
+        "https://arfan-junianto.github.io/machine-learning-kuliah/"
         "Presentasi-Repository-Machine-Learning.html"
     ) in readme
+
+
+def test_pages_workflow_publishes_assignment_and_visual_presentation() -> None:
+    workflow = PAGES_WORKFLOW.read_text(encoding="utf-8")
+
+    assert '"coursework/presentations/repository-machine-learning/**"' in workflow
+    assert "mkdir -p _site" in workflow
+    assert "coursework/assignments/pertemuan-06/. _site/" in workflow
+    assert (
+        "coursework/presentations/repository-machine-learning/"
+        "Presentasi-Repository-Machine-Learning.html" in workflow
+    )
+    assert "path: _site" in workflow
