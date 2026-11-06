@@ -1,10 +1,11 @@
-name: Deploy Assignment Pages
+name: Deploy Coursework Pages
 
 on:
   push:
     branches: [main]
     paths:
       - "coursework/assignments/pertemuan-06/**"
+      - "coursework/presentations/repository-machine-learning/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -31,10 +32,16 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6
 
-      - name: Upload assignment site
+      - name: Prepare coursework site
+        run: |
+          mkdir -p _site
+          cp -R coursework/assignments/pertemuan-06/. _site/
+          cp coursework/presentations/repository-machine-learning/Presentasi-Repository-Machine-Learning.html _site/Presentasi-Repository-Machine-Learning.html
+
+      - name: Upload coursework site
         uses: actions/upload-pages-artifact@v5
         with:
-          path: coursework/assignments/pertemuan-06
+          path: _site
 
       - name: Deploy GitHub Pages
         id: deployment

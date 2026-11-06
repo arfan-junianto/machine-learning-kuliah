@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Repository Machine Learning — Arfan Junianto</title>
+  <style>
+    :root {
+      --bg: #070b14;
+      --panel: #0d1423;
+      --panel-2: #111b2d;
+      --line: #26354e;
+      --ink: #f4f7fb;
+      --muted: #a9b6ca;
+      --blue: #58a6ff;
+      --teal: #2dd4bf;
+      --green: #3fb950;
+      --amber: #f0b429;
+      --red: #ff6b6b;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .deck { width: 100vw; height: 100vh; display: grid; place-items: center; }
+    .slide {
+      position: relative;
+      display: none;
+      width: min(100vw, calc(100vh * 16 / 9));
+      height: min(100vh, calc(100vw * 9 / 16));
+      min-height: 0;
+      margin: 0;
+      overflow: hidden;
+      padding: clamp(34px, 4vw, 76px);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 92% 8%, rgba(88, 166, 255, .14), transparent 27%),
+        linear-gradient(145deg, #0b1220, #080d17 62%);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, .35);
+    }
+    .slide.active { display: block; }
+    .slide::after {
+      content: attr(data-number);
+      position: absolute;
+      right: 42px;
+      bottom: 26px;
+      color: #64748b;
+      font: 700 15px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .slide.cover.active { display: grid; align-content: center; }
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--teal);
+      font-size: clamp(16px, 1.25vw, 22px);
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 1100px; margin-bottom: 24px; font-size: clamp(48px, 5.5vw, 92px); line-height: 1.02; letter-spacing: -.045em; }
+    h2 { margin-bottom: 28px; font-size: clamp(36px, 3.35vw, 58px); line-height: 1.08; letter-spacing: -.035em; }
+    h3 { margin-bottom: 12px; font-size: clamp(20px, 1.5vw, 28px); }
+    p, li { font-size: clamp(18px, 1.45vw, 26px); line-height: 1.5; }
+    ul, ol { margin: 0; padding-left: 1.25em; }
+    li + li { margin-top: .45em; }
+    a { color: var(--blue); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+    code { color: #d6e7ff; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .lede { max-width: 900px; color: var(--muted); font-size: clamp(22px, 2vw, 34px); }
+    .identity { margin-top: 36px; display: flex; gap: 14px; flex-wrap: wrap; }
+    .pill, .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(17, 27, 45, .82);
+      color: #dce6f5;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(22px, 3vw, 46px); align-items: center; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .card {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(17, 27, 45, .78);
+    }
+    .card p:last-child { margin-bottom: 0; }
+    .accent-card { border-color: rgba(45, 212, 191, .45); background: linear-gradient(145deg, rgba(45, 212, 191, .10), rgba(17, 27, 45, .85)); }
+    .big-number { display: block; margin-bottom: 6px; color: var(--blue); font-size: clamp(36px, 4vw, 68px); font-weight: 850; line-height: 1; }
+    .muted { color: var(--muted); }
+    .problem-arrow { display: flex; align-items: center; justify-content: center; color: var(--teal); font-size: 56px; }
+    .split-story { display: grid; grid-template-columns: 1fr 90px 1fr; gap: 12px; align-items: stretch; }
+    .repo-map { width: 100%; height: auto; max-height: 540px; }
+    .chapter-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; margin: 26px 0; }
+    .chapter {
+      min-height: 84px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel-2);
+      color: #d8e4f3;
+      font-size: 19px;
+      font-weight: 850;
+    }
+    .chapter.highlight { border-color: var(--teal); color: var(--teal); box-shadow: inset 0 0 0 1px rgba(45,212,191,.25); }
+    .browser-fragment {
+      overflow: hidden;
+      border: 1px solid #33435d;
+      border-radius: 18px;
+      background: #f7f9fc;
+      color: #172033;
+      box-shadow: 0 22px 55px rgba(0,0,0,.3);
+    }
+    .browser-bar { display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 15px; background: #e8edf4; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #94a3b8; }
+    .browser-body { padding: 24px 28px; }
+    .browser-body h3 { color: #202938; }
+    .code-cell { margin-top: 16px; padding: 14px 16px; border-left: 4px solid #f9ab00; border-radius: 8px; background: white; font: 600 16px/1.55 ui-monospace, monospace; }
+    .output-line { margin-top: 12px; padding: 12px 16px; border-radius: 8px; background: #e9f8ef; color: #175c35; font: 750 16px/1.4 ui-monospace, monospace; }
+    .demo-list { counter-reset: demo; list-style: none; padding: 0; }
+    .demo-list li { position: relative; padding-left: 54px; }
+    .demo-list li::before {
+      counter-increment: demo;
+      content: counter(demo);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #07101d;
+      font-weight: 900;
+    }
+    .pipeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; align-items: stretch; margin-top: 32px; }
+    .pipe-node { position: relative; padding: 22px 15px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel-2); text-align: center; }
+    .pipe-node:not(:last-child)::after { content: "→"; position: absolute; right: -22px; top: 35%; z-index: 2; color: var(--teal); font-size: 28px; }
+    .pipe-node strong { display: block; margin-bottom: 8px; color: var(--blue); font-size: 20px; }
+    .pipe-node span { color: var(--muted); font-size: 16px; line-height: 1.35; }
+    .metrics { display: grid; grid-template-columns: 1.25fr .75fr; gap: 28px; align-items: stretch; }
+    .model-bars { display: grid; gap: 18px; margin-top: 24px; }
+    .bar-row { display: grid; grid-template-columns: 180px 1fr 92px; gap: 12px; align-items: center; }
+    .bar-track { height: 18px; overflow: hidden; border-radius: 999px; background: #1d2a3e; }
+    .bar-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--blue), var(--teal)); }
+    .bar-value { color: #dce8f8; font-weight: 800; text-align: right; }
+    .metric-stack { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .metric { display: grid; place-content: center; min-height: 130px; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel-2); text-align: center; }
+    .metric strong { color: var(--teal); font-size: 38px; }
+    .metric span { margin-top: 6px; color: var(--muted); font-size: 16px; }
+    .streamlit-fragment { padding: 24px; border: 1px solid #33435d; border-radius: 18px; background: #fff; color: #1d2939; }
+    .warning { margin-bottom: 16px; padding: 12px 14px; border-radius: 8px; background: #fff7d6; color: #695500; font-size: 15px; }
+    .inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .fake-input { padding: 10px 12px; border: 1px solid #d0d5dd; border-radius: 8px; background: #f8fafc; font-size: 14px; }
+    .predict { display: inline-block; margin-top: 14px; padding: 10px 18px; border-radius: 8px; background: #ff4b4b; color: white; font-weight: 800; }
+    .quality-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .quality-card { min-height: 205px; padding: 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel-2); }
+    .quality-card .icon { margin-bottom: 18px; color: var(--teal); font-size: 34px; }
+    .quality-card p { color: var(--muted); font-size: 17px; }
+    .final-link { display: inline-block; max-width: 100%; margin-top: 24px; padding: 16px 20px; border: 1px solid rgba(88,166,255,.55); border-radius: 14px; background: rgba(88,166,255,.08); font: 700 clamp(16px,1.25vw,22px)/1.4 ui-monospace, monospace; overflow-wrap: anywhere; }
+    .speaker-notes { display: none; }
+    .source { position: absolute; left: clamp(34px, 4vw, 76px); bottom: 20px; color: #68778f; font-size: 13px; }
+    .source a { color: #8195b1; }
+    .controls {
+      position: fixed;
+      left: 50%;
+      bottom: 14px;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px;
+      border: 1px solid rgba(148,163,184,.28);
+      border-radius: 999px;
+      background: rgba(7,11,20,.82);
+      box-shadow: 0 12px 32px rgba(0,0,0,.35);
+      backdrop-filter: blur(14px);
+      transform: translateX(-50%);
+      opacity: .28;
+      transition: opacity .2s ease;
+    }
+    .controls:hover, .controls:focus-within { opacity: 1; }
+    .control-button {
+      width: 38px;
+      height: 38px;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: #dbe7f6;
+      font-size: 19px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .control-button:hover { background: #1d2a3e; color: white; }
+    .control-button:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+    #slide-status { min-width: 58px; color: #b9c7d9; font: 750 13px/1 ui-monospace, monospace; text-align: center; }
+    .progress-track { position: fixed; inset: 0 0 auto; z-index: 40; height: 4px; background: rgba(88,166,255,.12); }
+    #slide-progress { height: 100%; width: 10%; background: linear-gradient(90deg, var(--blue), var(--teal)); transition: width .2s ease; }
+    .overlay-panel {
+      position: fixed;
+      z-index: 60;
+      display: none;
+      border: 1px solid #3a4a64;
+      background: rgba(10,16,28,.97);
+      color: var(--ink);
+      box-shadow: 0 24px 70px rgba(0,0,0,.55);
+      backdrop-filter: blur(18px);
+    }
+    .overlay-panel.open { display: block; }
+    #notes-panel {
+      right: 22px;
+      bottom: 72px;
+      width: min(600px, calc(100vw - 44px));
+      max-height: 46vh;
+      overflow: auto;
+      padding: 22px 24px;
+      border-radius: 18px;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+    #notes-panel ol { padding-left: 1.2em; }
+    #notes-panel li { font-size: 14px; }
+    #help-panel {
+      inset: 50% auto auto 50%;
+      width: min(560px, calc(100vw - 40px));
+      padding: 28px;
+      border-radius: 20px;
+      transform: translate(-50%, -50%);
+    }
+    .shortcut-grid { display: grid; grid-template-columns: auto 1fr; gap: 12px 18px; margin-top: 18px; }
+    kbd { min-width: 48px; padding: 5px 8px; border: 1px solid #4b5d78; border-radius: 7px; background: #172238; color: white; font: 750 13px/1.2 ui-monospace, monospace; text-align: center; }
+    .close-help { position: absolute; top: 14px; right: 14px; }
+    @media (max-height: 700px) {
+      h1 { font-size: clamp(42px, 5vw, 68px); }
+      h2 { margin-bottom: 20px; font-size: clamp(32px, 3vw, 46px); }
+      p, li { font-size: clamp(16px, 1.28vw, 21px); line-height: 1.4; }
+      .slide { padding: clamp(30px, 3.6vw, 58px); }
+      .card { padding: 17px; }
+      .chapter { min-height: 66px; }
+      .quality-card { min-height: 164px; padding: 16px; }
+      .quality-card .icon { margin-bottom: 10px; }
+      .metric { min-height: 102px; }
+      .pipeline { margin-top: 20px; }
+      .pipe-node { padding: 16px 10px; }
+      .streamlit-fragment { padding: 17px 20px; }
+      .streamlit-fragment h3 { margin-bottom: 8px; }
+      .streamlit-fragment .warning { margin-bottom: 10px; padding: 9px 12px; }
+      .streamlit-fragment .fake-input { padding: 8px 10px; }
+      .streamlit-fragment .predict { margin-top: 10px; padding: 8px 16px; }
+      .slide:last-child h1 { margin-bottom: 14px; font-size: 50px !important; }
+      .slide:last-child .card { padding: 13px 15px; }
+      .slide:last-child .card h3 { margin-bottom: 5px; }
+      .slide:last-child .card p { font-size: 15px; }
+      .slide:last-child .final-link { margin-top: 14px; padding: 10px 14px; }
+      .slide:last-child .lede { margin-top: 14px !important; font-size: 18px; }
+    }
+    @media print {
+      html, body { height: auto; overflow: visible; background: white; }
+      .deck { display: block; width: auto; height: auto; }
+      .slide, .slide.active, .slide.cover.active { display: block; width: 13.333in; height: 7.5in; break-after: page; border-radius: 0; box-shadow: none; }
+      .controls, .progress-track, .overlay-panel { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="Presentasi repository Machine Learning">
+    <section class="slide cover active" data-number="01 / 10">
+      <p class="eyebrow">Machine Learning Coursework</p>
+      <h1>Dari Materi Kuliah<br>menjadi Project yang Bisa Dijalankan</h1>
+      <p class="lede">Repository GitHub sebagai pusat notebook, tugas, pengujian, dan deployment Machine Learning.</p>
+      <div class="identity">
+        <span class="pill">Arfan Junianto</span>
+        <span class="pill">NIM 202443570032</span>
+        <span class="pill">Portfolio + Live Demo</span>
+      </div>
+      <aside class="speaker-notes">
+        <strong>±45 detik.</strong> Selamat pagi/siang, Pak/Bu. Pada presentasi ini saya tidak hanya menunjukkan kumpulan file tugas. Saya ingin menunjukkan bagaimana seluruh materi Machine Learning saya susun menjadi repository yang dapat dibaca, diuji, dan dijalankan ulang. Alurnya dimulai dari notebook per bab, lalu berakhir pada mini project yang sudah dideploy. Transisi: pertama saya jelaskan masalah yang ingin saya rapikan melalui repository ini.
+      </aside>
+    </section>
+
+    <section class="slide" data-number="02 / 10">
+      <p class="eyebrow">01 — Latar Belakang</p>
+      <h2>Bukan Sekadar Menyimpan File</h2>
+      <div class="split-story">
+        <article class="card">
+          <h3>Sebelumnya</h3>
+          <ul class="muted">
+            <li>Materi, tugas, dan kode tersebar.</li>
+            <li>Sulit mengetahui versi terbaru.</li>
+            <li>Hasil sulit dijalankan ulang.</li>
+            <li>Demo bergantung pada satu komputer.</li>
+          </ul>
+        </article>
+        <div class="problem-arrow" aria-hidden="true">→</div>
+        <article class="card accent-card">
+          <h3>Melalui GitHub</h3>
+          <ul>
+            <li>Struktur tugas konsisten.</li>
+            <li>Riwayat perubahan tercatat.</li>
+            <li>Notebook dibuka lewat Colab.</li>
+            <li>Aplikasi dapat dicoba online.</li>
+          </ul>
+        </article>
+      </div>
+      <aside class="speaker-notes">
+        <strong>±60 detik.</strong> Masalah awalnya sederhana: file kuliah mudah tersebar dan hasil eksperimen sering hanya berjalan pada komputer pembuatnya. Karena itu saya menggunakan GitHub bukan hanya sebagai penyimpanan, tetapi sebagai pusat kerja. Struktur folder menunjukkan jenis pekerjaan, commit menyimpan riwayat, Colab membuat notebook lebih mudah direproduksi, dan deployment menunjukkan bahwa model dapat dipakai oleh antarmuka. Transisi: berikutnya saya tunjukkan peta isi repository.
+      </aside>
+    </section>
+
+    <section class="slide" data-number="03 / 10">
+      <p class="eyebrow">02 — Struktur Repository</p>
+      <h2>Satu Pintu untuk Seluruh Coursework</h2>
+      <div class="grid-2">
+        <svg class="repo-map" viewBox="0 0 760 510" role="img" aria-label="Peta struktur repository">
+          <defs>
+            <linearGradient id="repoGlow" x1="0" x2="1"><stop stop-color="#58a6ff"/><stop offset="1" stop-color="#2dd4bf"/></linearGradient>
+          </defs>
+          <rect x="20" y="20" width="720" height="70" rx="16" fill="#111b2d" stroke="url(#repoGlow)" stroke-width="2"/>
+          <text x="55" y="64" fill="#f4f7fb" font-size="24" font-weight="800">machine-learning-kuliah/</text>
+          <path d="M90 90V448M90 155H150M90 255H150M90 355H150M90 448H150" stroke="#40516b" stroke-width="3" fill="none"/>
+          <g font-family="system-ui" font-size="20">
+            <rect x="150" y="115" width="550" height="80" rx="14" fill="#0d1423" stroke="#26354e"/>
+            <text x="180" y="150" fill="#58a6ff" font-weight="800">assignments/</text><text x="180" y="177" fill="#a9b6ca">Tugas Pertemuan 6 • HTML • PDF</text>
+            <rect x="150" y="215" width="550" height="80" rx="14" fill="#0d1423" stroke="#26354e"/>
+            <text x="180" y="250" fill="#58a6ff" font-weight="800">implementasi-modul/</text><text x="180" y="277" fill="#a9b6ca">Notebook Bab 1–13 • Open in Colab</text>
+            <rect x="150" y="315" width="550" height="80" rx="14" fill="#0d1423" stroke="#2dd4bf"/>
+            <text x="180" y="350" fill="#2dd4bf" font-weight="800">bab-14-breast-cancer/</text><text x="180" y="377" fill="#a9b6ca">Training • Evaluasi • Test • Streamlit</text>
+            <rect x="150" y="415" width="550" height="66" rx="14" fill="#0d1423" stroke="#26354e"/>
+            <text x="180" y="455" fill="#58a6ff" font-weight="800">README + GitHub Actions</text>
+          </g>
+        </svg>
+        <div>
+          <article class="card"><span class="big-number">3</span><p class="muted">kelompok utama: tugas, notebook, dan mini project.</p></article>
+          <article class="card" style="margin-top:16px"><span class="big-number">1</span><p class="muted">README utama sebagai indeks dan pintu masuk.</p></article>
+          <article class="card" style="margin-top:16px"><span class="big-number">∞</span><p class="muted">dapat diakses kembali dari perangkat berbeda.</p></article>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <strong>±75 detik.</strong> Dari halaman utama, repository dibagi menjadi assignments untuk tugas pertemuan, implementasi modul untuk notebook Bab 1 sampai 13, dan folder khusus Bab 14 untuk mini project end-to-end. README berfungsi sebagai indeks, bukan sekadar teks pembuka. Pengunjung tidak perlu mencari file satu per satu karena tersedia tautan langsung menuju notebook, tugas visual, dan aplikasi. Cue demo: buka halaman utama GitHub dan tunjukkan tabel Akses Cepat. Jika offline, gunakan diagram ini. Transisi: saya lanjut ke bagian implementasi modul.
+      </aside>
+    </section>
+
+    <section class="slide" data-number="04 / 10">
+      <p class="eyebrow">03 — Implementasi Modul</p>
+      <h2>Bab 1–13: Belajar melalui Notebook Mandiri</h2>
+      <div class="chapter-grid" aria-label="Daftar Bab 1 sampai 13">
+        <div class="chapter highlight">Bab 1</div><div class="chapter">Bab 2</div><div class="chapter">Bab 3</div><div class="chapter">Bab 4</div><div class="chapter">Bab 5</div><div class="chapter">Bab 6</div><div class="chapter">Bab 7</div>
+        <div class="chapter">Bab 8</div><div class="chapter">Bab 9</div><div class="chapter">Bab 10</div><div class="chapter">Bab 11</div><div class="chapter">Bab 12</div><div class="chapter">Bab 13</div><div class="chapter highlight">Colab</div>
+      </div>
+      <div class="grid-3">
+        <article class="card"><h3>Mandiri</h3><p class="muted">Dataset bawaan atau sintetis; tidak memakai path komputer lokal.</p></article>
+        <article class="card"><h3>Terarah</h3><p class="muted">Penjelasan, kode, visualisasi, evaluasi, dan latihan tersusun per bab.</p></article>
+        <article class="card"><h3>Dapat diuji</h3><p class="muted">Struktur, sintaks, workflow, dan anti-leakage diperiksa otomatis.</p></article>
+      </div>
+      <p class="source">Implementasi mengikuti Modul Praktikum Machine Learning; referensi halaman tersedia di masing-masing notebook.</p>
+      <aside class="speaker-notes">
+        <strong>±75 detik.</strong> Bab 1 sampai 13 dibuat sebagai notebook mandiri. Artinya tidak ada path menuju folder laptop saya, sehingga pengguna lain dapat membukanya langsung di Colab. Setiap bab tidak hanya berisi kode, tetapi juga tujuan, interpretasi hasil, visualisasi, latihan, dan sitasi halaman modul. Bab 12 dan 13 memakai TensorFlow dan lebih cocok dijalankan dengan runtime GPU. Saya memilih Bab 1 untuk demo karena cepat dan mewakili workflow dasar klasifikasi. Transisi: sekarang saya tunjukkan pengalaman menjalankannya.
+      </aside>
+    </section>
+
+    <section class="slide" data-number="05 / 10">
+      <p class="eyebrow">04 — Live Demo 1</p>
+      <h2>Bab 1 Langsung Dibuka di Google Colab</h2>
+      <div class="grid-2">
+        <div class="browser-fragment" aria-label="Visual fallback notebook Colab Bab 1">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <div class="browser-body">
+            <h3>Bab 1 — Konsep Dasar Machine Learning</h3>
+            <p style="font-size:16px;color:#667085">Dataset Iris • K-Nearest Neighbors • evaluasi</p>
+            <div class="code-cell">iris = load_iris(as_frame=True)<br>model.fit(X_train, y_train)<br>accuracy_score(y_test, prediksi)</div>
+            <div class="output-line">Akurasi test final: 1.000</div>
+          </div>
+        </div>
+        <div>
+          <ol class="demo-list">
+            <li>Klik tombol <strong>Buka</strong> pada indeks.</li>
+            <li>Pilih <strong>Runtime → Run all</strong>.</li>
+            <li>Tunjukkan split data, training KNN, dan evaluasi.</li>
+            <li>Simpan salinan hasil ke Google Drive.</li>
+          </ol>
+          <a class="final-link" href="https://colab.research.google.com/github/arfan-junianto/machine-learning-kuliah/blob/main/coursework/projects/implementasi-modul-machine-learning/notebooks/bab-01-konsep-dasar-machine-learning/implementasi-bab-01-konsep-dasar.ipynb">Buka notebook Bab 1 ↗</a>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <strong>±90 detik + demo.</strong> Cue: klik tautan Colab yang sudah dibuka di tab kedua. Tunjukkan judul, import library, pemuatan Iris, train-test split terstratifikasi, KNN, lalu output akurasi. Tidak perlu menjalankan ulang jika output salinan Drive sudah tersedia; jelaskan bahwa Run all dapat mereproduksi hasil. Jika Colab lambat atau meminta login, jangan menunggu—gunakan visual fallback di slide dan jelaskan empat langkah di kanan. Transisi: notebook menunjukkan materi per bab, sedangkan Bab 14 menggabungkan semuanya menjadi satu proyek.
+      </aside>
+    </section>
+
+    <section class="slide" data-number="06 / 10">
+      <p class="eyebrow">05 — Showcase End-to-End</p>
+      <h2>Bab 14: Dari Data hingga Deployment</h2>
+      <div class="pipeline" aria-label="Workflow mini project Bab 14">
+        <div class="pipe-node"><strong>Data</strong><span>569 observasi<br>30 fitur asli</span></div>
+        <div class="pipe-node"><strong>Preparation</strong><span>10 fitur mean<br>split stratified</span></div>
+        <div class="pipe-node"><strong>Modeling</strong><span>LogReg • SVM<br>Random Forest</span></div>
+        <div class="pipe-node"><strong>Evaluation</strong><span>CV berdasarkan F2<br>test dibuka sekali</span></div>
+        <div class="pipe-node"><strong>Deployment</strong><span>model bundle<br>Streamlit</span></div>
+      </div>
+      <div class="grid-3" style="margin-top:34px">
+        <article class="card"><h3>Anti-leakage</h3><p class="muted">Preprocessing berada di dalam pipeline dan test set tidak digunakan untuk memilih model.</p></article>
+        <article class="card"><h3>Reproducible</h3><p class="muted">Seed, split, parameter, metrik, dan artefak hasil disimpan secara eksplisit.</p></article>
+        <article class="card"><h3>Responsible</h3><p class="muted">Keterbatasan dan disclaimer medis ditampilkan pada laporan serta aplikasi.</p></article>
+      </div>
+      <p class="source">Alur proyek mengikuti tugas Bab 14 [ML-MODUL-01, hlm. 89–94]. Dataset UCI/scikit-learn merupakan sumber luar knowledge base.</p>
+      <aside class="speaker-notes">
+        <strong>±90 detik.</strong> Bab 14 menerapkan workflow end-to-end. Data Breast Cancer Wisconsin dipahami dan disiapkan, lalu tiga model dibandingkan menggunakan fold dan metrik yang sama. Model dipilih dari cross-validation berdasarkan F2 karena kelas ganas perlu mendapat perhatian lebih. Test set tidak dipakai berulang untuk memilih model; test hanya dibuka setelah pemenang ditentukan. Model dan urutan preprocessing kemudian disimpan sebagai satu bundle untuk aplikasi. Tegaskan bahwa dataset dan implementasi ini untuk demonstrasi akademik, bukan diagnosis medis. Transisi: berikutnya hasil evaluasinya.
+      </aside>
+    </section>
+
+    <section class="slide" data-number="07 / 10">
+      <p class="eyebrow">06 — Hasil Evaluasi</p>
+      <h2>Random Forest Terpilih secara Terukur</h2>
+      <div class="metrics">
+        <article class="card">
+          <h3>F2 rata-rata cross-validation</h3>
+          <div class="model-bars">
+            <div class="bar-row"><span>Logistic Regression</span><div class="bar-track"><div class="bar-fill" style="width:91.3%"></div></div><span class="bar-value">0,913</span></div>
+            <div class="bar-row"><span>SVM-RBF</span><div class="bar-track"><div class="bar-fill" style="width:90.9%"></div></div><span class="bar-value">0,909</span></div>
+            <div class="bar-row"><span>Random Forest</span><div class="bar-track"><div class="bar-fill" style="width:93.4%"></div></div><span class="bar-value">0,934</span></div>
+          </div>
+          <p class="muted" style="margin-top:28px">Pemenang ditentukan sebelum test set final dilihat.</p>
+        </article>
+        <div class="metric-stack">
+          <div class="metric"><strong>94,74%</strong><span>accuracy test</span></div>
+          <div class="metric"><strong>92,86%</strong><span>recall ganas</span></div>
+          <div class="metric"><strong>0,9848</strong><span>ROC-AUC</span></div>
+          <div class="metric"><strong>3 FN</strong><span>kasus ganas terlewat</span></div>
+        </div>
+      </div>
+      <p class="source">Metrik tersimpan di <code>artifacts/metrics.json</code>; implementasi mengikuti [ML-MODUL-01, hlm. 89–94].</p>
+      <aside class="speaker-notes">
+        <strong>±90 detik.</strong> Random Forest dipilih karena F2 cross-validation tertinggi, yaitu 0,934 plus-minus 0,021. Setelah model terkunci, evaluasi test menghasilkan accuracy 94,74 persen dan recall kelas ganas 92,86 persen. Saya sengaja tetap menampilkan tiga false negative. Skor tinggi tidak berarti model sempurna dan tidak berarti siap digunakan secara klinis. Angka lengkap tersimpan sebagai JSON agar laporan dan aplikasi menggunakan sumber hasil yang sama. Transisi: hasil ini kemudian dibawa ke aplikasi Streamlit.
+      </aside>
+    </section>
+
+    <section class="slide" data-number="08 / 10">
+      <p class="eyebrow">07 — Live Demo 2</p>
+      <h2>Model Dapat Dicoba melalui Streamlit</h2>
+      <div class="grid-2">
+        <div class="streamlit-fragment" aria-label="Visual fallback aplikasi Streamlit">
+          <h3>Skrining Risiko Kanker Payudara</h3>
+          <div class="warning">Aplikasi ini hanya demonstrasi akademik dan bukan diagnosis medis.</div>
+          <p style="font-size:14px;color:#667085">Model terpilih: Random Forest · label positif: ganas</p>
+          <div class="inputs">
+            <div class="fake-input">Rata-rata radius&nbsp;&nbsp; 13.340</div><div class="fake-input">Rata-rata tekstur&nbsp;&nbsp; 18.900</div>
+            <div class="fake-input">Rata-rata perimeter&nbsp;&nbsp; 86.180</div><div class="fake-input">Rata-rata luas&nbsp;&nbsp; 546.400</div>
+            <div class="fake-input">Rata-rata kehalusan&nbsp;&nbsp; 0.095</div><div class="fake-input">Rata-rata kekompakan&nbsp;&nbsp; 0.092</div>
+          </div>
+          <span class="predict">Prediksi</span>
+        </div>
+        <div>
+          <ul>
+            <li>Sepuluh input mengikuti fitur training.</li>
+            <li>Rentang input dibatasi untuk mencegah ekstrapolasi diam-diam.</li>
+            <li>Output menampilkan kelas dan probabilitas ganas.</li>
+            <li>Pipeline inference sama dengan pipeline training.</li>
+          </ul>
+          <a class="final-link" href="https://machine-learning-kuliah-edg2ydcbvp2yjsu7weh5dx.streamlit.app/">Buka live Streamlit ↗</a>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <strong>±90 detik + demo.</strong> Cue: pindah ke tab Streamlit. Tunjukkan disclaimer, sepuluh input, lalu gunakan nilai bawaan dan klik Prediksi. Jelaskan bahwa aplikasi memuat model bundle yang sama dengan hasil training, termasuk urutan fitur dan rentang data. Jangan menyebut hasil sebagai diagnosis; gunakan istilah prediksi model atau demonstrasi akademik. Jika aplikasi sedang tidur, login, atau koneksi gagal, gunakan visual fallback pada slide ini dan lanjutkan tanpa meminta audiens menunggu. Transisi: deployment saja belum cukup; repository juga perlu bukti kualitas.
+      </aside>
+    </section>
+
+    <section class="slide" data-number="09 / 10">
+      <p class="eyebrow">08 — Quality Assurance</p>
+      <h2>Repository Diuji, Bukan Hanya Ditampilkan</h2>
+      <div class="quality-grid">
+        <article class="quality-card"><div class="icon">✓</div><h3>69 Test Utama</h3><p>Notebook dan mini project diperiksa otomatis.</p></article>
+        <article class="quality-card"><div class="icon">⌁</div><h3>Anti-leakage</h3><p>Quality gate mendeteksi pemakaian holdout untuk pemilihan model.</p></article>
+        <article class="quality-card"><div class="icon">↻</div><h3>Smoke Run</h3><p>Notebook klasik Bab 1–11 dieksekusi berurutan.</p></article>
+        <article class="quality-card"><div class="icon">#</div><h3>Sitasi</h3><p>Klaim materi menunjuk ID sumber dan halaman knowledge base.</p></article>
+      </div>
+      <div class="card accent-card" style="margin-top:24px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+        <p style="margin:0"><strong>GitHub Actions</strong><br><span class="muted">Test dapat dijalankan kembali setiap kali perubahan dikirim.</span></p>
+        <span class="pill" style="border-color:rgba(63,185,80,.6);color:#79dc89">reproducible</span>
+      </div>
+      <aside class="speaker-notes">
+        <strong>±75 detik.</strong> Nilai repository ini bukan hanya tampilannya. Ada 69 test utama untuk struktur notebook dan mini project, ditambah test tampilan untuk tugas berbasis HTML. Notebook Bab 1 sampai 11 juga dijalankan sebagai smoke test. Quality gate anti-leakage memeriksa pola berbahaya seperti memakai test set untuk tuning atau memilih kandidat. GitHub Actions membuat pemeriksaan ini dapat dijalankan ulang setelah perubahan. Angka test adalah kondisi repository saat deck dibuat; jika dosen bertanya, buka badge Actions pada README. Transisi: saya tutup dengan manfaat utama dan batasannya.
+      </aside>
+    </section>
+
+    <section class="slide cover" data-number="10 / 10">
+      <p class="eyebrow">Kesimpulan</p>
+      <h1 style="font-size:clamp(44px,4.8vw,80px)">Belajar, Membuktikan,<br>dan Membagikan</h1>
+      <div class="grid-3" style="max-width:1200px">
+        <article class="card"><h3>Belajar</h3><p class="muted">Bab 1–13 menjadi notebook yang dapat dijalankan.</p></article>
+        <article class="card"><h3>Membuktikan</h3><p class="muted">Bab 14 dan test menunjukkan workflow yang terukur.</p></article>
+        <article class="card"><h3>Membagikan</h3><p class="muted">GitHub, Colab, dan Streamlit membuka akses dari perangkat lain.</p></article>
+      </div>
+      <a class="final-link" href="https://github.com/arfan-junianto/machine-learning-kuliah">github.com/arfan-junianto/machine-learning-kuliah</a>
+      <p class="lede" style="margin-top:28px">Terima kasih.</p>
+      <aside class="speaker-notes">
+        <strong>±60 detik.</strong> Kesimpulan saya: repository ini menghubungkan tiga hal. Pertama, proses belajar melalui notebook Bab 1 sampai 13. Kedua, pembuktian melalui mini project, metrik, dan pengujian. Ketiga, pembagian hasil melalui GitHub, Colab, dan Streamlit. Repository masih dapat dikembangkan dengan notebook lanjutan, evaluasi lebih luas, dan dokumentasi tambahan. Terima kasih, saya siap menerima pertanyaan.
+        <hr>
+        <strong>Jawaban singkat pertanyaan dosen:</strong>
+        <ol>
+          <li><b>Mengapa GitHub?</b> Untuk versioning, akses publik, dokumentasi, dan reproducibility.</li>
+          <li><b>Mengapa Colab?</b> Mengurangi ketergantungan pada setup komputer lokal.</li>
+          <li><b>Mengapa Random Forest?</b> F2 CV tertinggi pada perbandingan yang memakai fold dan metrik sama.</li>
+          <li><b>Apakah test set dipakai tuning?</b> Tidak; test dikunci sampai model dipilih dari CV.</li>
+          <li><b>Mengapa F2?</b> Memberi bobot lebih besar pada recall kelas ganas.</li>
+          <li><b>Apakah aplikasi medis?</b> Tidak, hanya demonstrasi akademik dan bukan diagnosis medis.</li>
+          <li><b>Bagaimana memastikan kode dapat dijalankan?</b> Notebook mandiri, requirements, test otomatis, dan smoke run.</li>
+          <li><b>Apa pengembangan berikutnya?</b> Validasi eksternal, audit kalibrasi/fairness, dan monitoring data drift.</li>
+        </ol>
+      </aside>
+    </section>
+  </main>
+  <div class="progress-track" aria-hidden="true"><div id="slide-progress" style="width: 10%;"></div></div>
+  <nav class="controls" aria-label="Kontrol presentasi">
+    <button class="control-button" id="previous-slide" type="button" aria-label="Slide sebelumnya" title="Sebelumnya (←)">←</button>
+    <span id="slide-status" aria-live="polite">1 / 10</span>
+    <button class="control-button" id="next-slide" type="button" aria-label="Slide berikutnya" title="Berikutnya (→)">→</button>
+    <button class="control-button" id="notes-toggle" type="button" aria-label="Tampilkan catatan pembicara" title="Catatan (N)">N</button>
+    <button class="control-button" id="fullscreen-toggle" type="button" aria-label="Masuk layar penuh" title="Layar penuh (F)">⛶</button>
+    <button class="control-button" id="help-toggle" type="button" aria-label="Tampilkan bantuan" title="Bantuan (?)">?</button>
+  </nav>
+  <aside class="overlay-panel" id="notes-panel" aria-hidden="true" aria-label="Catatan pembicara"></aside>
+  <aside class="overlay-panel" id="help-panel" aria-hidden="true" aria-label="Bantuan kontrol">
+    <button class="control-button close-help" id="help-close" type="button" aria-label="Tutup bantuan">×</button>
+    <h3>Kontrol Presentasi</h3>
+    <div class="shortcut-grid">
+      <kbd>← →</kbd><span>Slide sebelumnya / berikutnya</span>
+      <kbd>Home</kbd><span>Kembali ke slide pertama</span>
+      <kbd>End</kbd><span>Menuju slide terakhir</span>
+      <kbd>N</kbd><span>Tampilkan catatan pembicara</span>
+      <kbd>F</kbd><span>Masuk atau keluar layar penuh</span>
+      <kbd>?</kbd><span>Buka bantuan ini</span>
+      <kbd>Esc</kbd><span>Tutup panel yang terbuka</span>
+    </div>
+  </aside>
+  <script>
+    (() => {
+      const slides = [...document.querySelectorAll('.slide')];
+      const status = document.getElementById('slide-status');
+      const progress = document.getElementById('slide-progress');
+      const notesPanel = document.getElementById('notes-panel');
+      const helpPanel = document.getElementById('help-panel');
+      let current = 0;
+
+      const closePanel = (panel) => {
+        panel.classList.remove('open');
+        panel.setAttribute('aria-hidden', 'true');
+      };
+
+      const openPanel = (panel) => {
+        panel.classList.add('open');
+        panel.setAttribute('aria-hidden', 'false');
+      };
+
+      const updateNotes = () => {
+        const source = slides[current].querySelector('.speaker-notes');
+        notesPanel.innerHTML = source ? source.innerHTML : '<p>Tidak ada catatan.</p>';
+      };
+
+      const showSlide = (index) => {
+        current = Math.max(0, Math.min(slides.length - 1, index));
+        slides.forEach((slide, slideIndex) => {
+          slide.classList.toggle('active', slideIndex === current);
+          slide.setAttribute('aria-hidden', slideIndex === current ? 'false' : 'true');
+        });
+        status.textContent = `${current + 1} / ${slides.length}`;
+        progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+        updateNotes();
+        history.replaceState(null, '', `#slide-${current + 1}`);
+      };
+
+      const toggleNotes = () => {
+        if (notesPanel.classList.contains('open')) closePanel(notesPanel);
+        else {
+          updateNotes();
+          closePanel(helpPanel);
+          openPanel(notesPanel);
+        }
+      };
+
+      const toggleHelp = () => {
+        if (helpPanel.classList.contains('open')) closePanel(helpPanel);
+        else {
+          closePanel(notesPanel);
+          openPanel(helpPanel);
+        }
+      };
+
+      const toggleFullscreen = async () => {
+        if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+        else await document.exitFullscreen();
+      };
+
+      document.getElementById('previous-slide').addEventListener('click', () => showSlide(current - 1));
+      document.getElementById('next-slide').addEventListener('click', () => showSlide(current + 1));
+      document.getElementById('notes-toggle').addEventListener('click', toggleNotes);
+      document.getElementById('fullscreen-toggle').addEventListener('click', () => toggleFullscreen().catch(() => {}));
+      document.getElementById('help-toggle').addEventListener('click', toggleHelp);
+      document.getElementById('help-close').addEventListener('click', () => closePanel(helpPanel));
+
+      document.addEventListener('keydown', (event) => {
+        const key = event.key.toLowerCase();
+        if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') showSlide(current + 1);
+        else if (event.key === 'ArrowLeft' || event.key === 'PageUp') showSlide(current - 1);
+        else if (event.key === 'Home') showSlide(0);
+        else if (event.key === 'End') showSlide(slides.length - 1);
+        else if (key === 'n') toggleNotes();
+        else if (key === 'f') toggleFullscreen().catch(() => {});
+        else if (event.key === '?') toggleHelp();
+        else if (event.key === 'Escape') {
+          closePanel(notesPanel);
+          closePanel(helpPanel);
+        }
+      });
+
+      document.querySelectorAll('a[href^="http"]').forEach((link) => {
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+      });
+
+      const requested = Number(location.hash.replace('#slide-', ''));
+      showSlide(Number.isInteger(requested) && requested > 0 ? requested - 1 : 0);
+    })();
+  </script>
+</body>
+</html>
