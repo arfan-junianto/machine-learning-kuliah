@@ -11,6 +11,8 @@ from selenium.webdriver.common.keys import Keys
 
 PRESENTATION_DIR = Path(__file__).resolve().parents[1]
 PRESENTATION = PRESENTATION_DIR / "Presentasi-Repository-Machine-Learning.html"
+REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
+ROOT_README = REPOSITORY_ROOT / "README.md"
 
 
 class PresentationParser(HTMLParser):
@@ -177,3 +179,13 @@ def test_every_slide_fits_common_projector_viewports(browser, width: int, height
         )
         assert dimensions["scrollWidth"] <= dimensions["width"] + 1, f"slide {index + 1} overflow horizontal"
         assert dimensions["scrollHeight"] <= dimensions["height"] + 1, f"slide {index + 1} overflow vertical"
+
+
+def test_root_readme_links_the_offline_repository_presentation() -> None:
+    readme = ROOT_README.read_text(encoding="utf-8")
+
+    assert "Presentasi Repository (offline)" in readme
+    assert (
+        "coursework/presentations/repository-machine-learning/"
+        "Presentasi-Repository-Machine-Learning.html"
+    ) in readme
