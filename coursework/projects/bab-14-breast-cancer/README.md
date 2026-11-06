@@ -4,6 +4,16 @@ Proyek ini menyelesaikan alur machine learning end-to-end: memahami masalah, men
 
 > **Peringatan:** aplikasi dan model ini hanya demonstrasi akademik, bukan diagnosis medis dan bukan pengganti tenaga kesehatan.
 
+## Notebook Google Colab
+
+[![Buka Notebook di Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arfan-junianto/machine-learning-kuliah/blob/main/coursework/projects/bab-14-breast-cancer/notebooks/mini-project-bab-14-breast-cancer.ipynb)
+
+Notebook menjalankan alur lengkap dari EDA, data preparation, komparasi tiga
+model, evaluasi, interpretasi fitur, hingga serialisasi model. Setelah terbuka,
+pilih **Runtime → Run all**. Mode tuning notebook dibuat lebih ringkas agar nyaman
+dijalankan di Colab, sedangkan hasil proyek utama tetap berasal dari eksperimen
+penuh yang terdokumentasi dalam `artifacts/`.
+
 ## Live Demo
 
 [![Buka aplikasi Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://machine-learning-kuliah-edg2ydcbvp2yjsu7weh5dx.streamlit.app/)
@@ -64,6 +74,7 @@ Angka lengkap ada di [`artifacts/metrics.json`](artifacts/metrics.json) dan pemb
 ├── train.py                       # entry point training penuh
 ├── report.md                      # laporan ilmiah
 ├── presentation.md                # deck dan catatan presentasi 10–15 menit
+├── notebooks/                     # notebook end-to-end untuk Google Colab
 ├── artifacts/                     # model, metrik, tabel, dan visual hasil training
 ├── src/breast_cancer_project/
 │   ├── data.py                    # data dan split terstratifikasi
