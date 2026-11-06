@@ -1,0 +1,4 @@
+model,cv_f2_mean,cv_f2_std,cv_recall_mean,cv_f1_mean,cv_precision_mean,cv_roc_auc_mean,cv_pr_auc_mean,best_params
+Logistic Regression,0.910449811625693,0.03213334586057267,0.9073982437185147,0.9152298757339313,0.9237685592384992,0.9645551732299614,0.9575628956003174,"{""model__C"": 10.0, ""model__class_weight"": null}"
+Decision Tree,0.9351581713930542,0.02970248817983924,0.9457105931203493,0.9204540906986391,0.8986611999405275,0.9615678737366755,0.9504266817837828,"{""model__class_weight"": null, ""model__max_depth"": 3, ""model__min_samples_leaf"": 15}"
+Random Forest,0.948030352489545,0.024508134568199072,0.9568692428028605,0.9355063851547387,0.9164341076468595,0.9732741861175711,0.9695019496653293,"{""model__class_weight"": ""balanced"", ""model__max_depth"": 5, ""model__min_samples_leaf"": 5, ""model__n_estimators"": 300}"

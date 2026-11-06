@@ -1,0 +1,5 @@
+# Dataset dapat diunduh ulang dengan download_data.py.
+data/raw/*.parquet
+
+# Model ini sengaja dipublikasikan agar aplikasi Streamlit siap dijalankan.
+!artifacts/model_bundle.joblib

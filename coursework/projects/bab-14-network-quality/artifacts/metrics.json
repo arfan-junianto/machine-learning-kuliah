@@ -1,0 +1,34 @@
+{
+  "selected_model": "Random Forest",
+  "test_metrics": {
+    "accuracy": 0.9276190476190476,
+    "precision": 0.9113924050632911,
+    "recall": 0.927038626609442,
+    "f1": 0.9191489361702128,
+    "f2": 0.9238665526090676,
+    "roc_auc": 0.9686195543535776,
+    "pr_auc": 0.94741472951792,
+    "confusion_matrix": [
+      [
+        271,
+        21
+      ],
+      [
+        17,
+        216
+      ]
+    ]
+  },
+  "rows_after_cleaning": 2534,
+  "class_distribution": {
+    "0": 1256,
+    "1": 1278
+  },
+  "train_test": {
+    "training_rows": 2009,
+    "test_rows": 525,
+    "training_countries": 181,
+    "test_countries": 46,
+    "country_overlap": 0
+  }
+}
